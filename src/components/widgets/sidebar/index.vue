@@ -80,85 +80,18 @@
           <div class="sidebar-wrap bg-light">
             <h3 class="heading mb-4">Star Rating</h3>
             <form class="star-rating">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
+              <div
+                v-for="el in checkBoxConf" :key="el.id"
+              >
+                <BaseCheckBox 
+                  :type="el.type"
+                  :name="el.name"
                   id="exampleCheck1"
-                />
-                <label class="form-check-label" for="exampleCheck1">
-                  <p class="rate">
-                    <span
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star"></i
-                    ></span>
-                  </p>
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="exampleCheck1"
-                />
-                <label class="form-check-label" for="exampleCheck1">
-                  <p class="rate">
-                    <span
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star-o"></i
-                    ></span>
-                  </p>
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="exampleCheck1"
-                />
-                <label class="form-check-label" for="exampleCheck1">
-                  <p class="rate">
-                    <span
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star"></i><i class="icon-star-o"></i
-                      ><i class="icon-star-o"></i
-                    ></span>
-                  </p>
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="exampleCheck1"
-                />
-                <label class="form-check-label" for="exampleCheck1">
-                  <p class="rate">
-                    <span
-                      ><i class="icon-star"></i><i class="icon-star"></i
-                      ><i class="icon-star-o"></i><i class="icon-star-o"></i
-                      ><i class="icon-star-o"></i
-                    ></span>
-                  </p>
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="exampleCheck1"
-                />
-                <label class="form-check-label" for="exampleCheck1">
-                  <p class="rate">
-                    <span
-                      ><i class="icon-star"></i><i class="icon-star-o"></i
-                      ><i class="icon-star-o"></i><i class="icon-star-o"></i
-                      ><i class="icon-star-o"></i
-                    ></span>
-                  </p>
-                </label>
+                  value="four-stars"
+                  @checked:value="(val) => exist(val, el.propertyForSearch)"
+                >
+                  <p class="rate"><span v-html="el.inSlot"></span></p>
+                </BaseCheckBox>
               </div>
             </form>
           </div>
@@ -166,15 +99,49 @@
 </template>
 <script setup>
 import { dataIn } from '@/assets/js/picker.js';
-import { BaseInput, BaseButton, BaseSelect } from '@/components/ui';
+import { BaseInput, BaseButton, BaseSelect, BaseCheckBox } from '@/components/ui';
+import { ref } from 'vue';
+import { checkBoxConf } from '@/config/checkBoxConfig.js';
 
 // const selected = 'Select Location'
 function changeDate(nameSelector) {
-
   const idInput = nameSelector.target.id;
   console.log(idInput);
   dataIn(idInput);
-        
-
 }
+function exist(value, property) {
+  searchParams.value.starRating[property].checked = value;
+
+  console.log(value, property);
+}
+function currentComponent (name) {
+    return markRaw(components[name])
+}
+const searchParams = ref({
+  city: '',
+  country: '',
+  starRating: {
+    fiveStars: 
+      { checked: false,
+        num: 5
+      },
+    fourStars: 
+      { checked: false,
+        num: 4
+      },
+    threeStars: 
+      { checked: false,
+        num: 3
+      },
+    twoStars: 
+      { checked: false,
+        num: 2
+      },
+    oneStar: 
+      { checked: false,
+        num: 1
+      },
+
+  }
+})
 </script>
