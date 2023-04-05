@@ -9135,9 +9135,10 @@ textarea.form-control {
   .sidebar-wrap input[type=number]::-webkit-outer-spin-button,
   .sidebar-wrap input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none; }
-  .sidebar-wrap input[type=number]:invalid,
-  .sidebar-wrap input[type=number]:out-of-range {
-    border: 2px solid #ff6347; }
+  /* .sidebar-wrap input[type=number]:invalid, */
+  /* .sidebar-wrap input[type=number]:out-of-range {
+    border: 2px solid #ff6347; 
+  } */
   .sidebar-wrap input[type=range] {
     -webkit-appearance: none;
     width: 100%; }

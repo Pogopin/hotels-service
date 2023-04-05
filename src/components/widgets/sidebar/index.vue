@@ -10,6 +10,7 @@
                     class="form-control"
                     placeholder="Destination, City"
                     id="checkin_dectination"
+                    @update:value="changeCity"
                   />
                 </div>
                 <div class="form-group">
@@ -22,6 +23,7 @@
                         class="form-control"
                         :options="[{name: 'San Francisco USA', value: 1},{name: 'Berlin Germany', value: 2},{name: 'Lodon UK', value: 3},{name: 'Paris France', value: 4}]"
                         selected="Select Location"
+                        @update:select="sel"
                     />
                   </div>
                 </div>
@@ -44,28 +46,13 @@
                   />
                 </div>
                 <div class="form-group">
-                  <div class="range-slider">
-                    <span>
-                      <input type="number" value="25000" min="0" max="120000" />
-                      -
-                      <input type="number" value="50000" min="0" max="120000" />
-                    </span>
-                    <input
-                      value="1000"
-                      min="0"
-                      max="120000"
-                      step="500"
-                      type="range"
-                    />
-                    <input
-                      value="50000"
-                      min="0"
-                      max="120000"
-                      step="500"
-                      type="range"
-                    />
-                    <!-- </svg> -->
-                  </div>
+                  <RangeSlider
+                    type="range"
+                    :minValue="1000"
+                    :maxValue="120000"
+                    :step="500"
+                    @update:priceRange="priceRangeSelect" 
+                  />
                 </div>
                 <div class="form-group">
                   <BaseButton
@@ -99,27 +86,42 @@
 </template>
 <script setup>
 import { dataIn } from '@/assets/js/picker.js';
-import { BaseInput, BaseButton, BaseSelect, BaseCheckBox } from '@/components/ui';
+import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from '@/components/ui';
 import { ref } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
 
-// const selected = 'Select Location'
+function priceRangeSelect(min, max) {
+  // console.log('minPrice: ', min )
+  // console.log('maxPrice: ', max )
+  searchParams.value.minPriceValue = min;
+  searchParams.value.maxPriceValue = max;
+}
+
 function changeDate(nameSelector) {
   const idInput = nameSelector.target.id;
   console.log(idInput);
   dataIn(idInput);
 }
+function changeCity(val) {
+  searchParams.value.city = val;
+};
+function sel(value) {
+  console.log(value);
+  searchParams.value.country = value;
+};
 function exist(value, property) {
   searchParams.value.starRating[property].checked = value;
 
   console.log(value, property);
-}
+};
 function currentComponent (name) {
     return markRaw(components[name])
-}
+};
 const searchParams = ref({
   city: '',
   country: '',
+  minPriceValue: 0,
+  maxPriceValue: 1000,
   starRating: {
     fiveStars: 
       { checked: false,

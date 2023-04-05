@@ -14,11 +14,10 @@
         </div>
 
     </div>
-  
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, } from 'vue';
+import { defineProps, ref, onMounted, defineEmits } from 'vue';
 
 const optionsVisible = ref(false);
 const selected = ref(props.selected);
@@ -32,11 +31,13 @@ const props = defineProps({
     selected: String,
     title: String
 })
+const emits = defineEmits(['update:select']);
 function selectOptions(option) {
     selected.value = option;
     optionsVisible.value = false;
+
+    emits('update:select', selected.value);
 }
-const dd = ref('')
 onMounted(()=> {
     window.addEventListener('click', (event) => {
         if (!event.target.closest('.select-wrap')) optionsVisible.value = false;
