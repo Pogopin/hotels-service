@@ -60,6 +60,7 @@
                     modifyStyle="btn-primary py-3 px-5"
                   />
                 </div>
+                <button @click="saveData">ок</button>
               </div>
             </form>
           </div>
@@ -89,6 +90,16 @@ import { dataIn } from '@/assets/js/picker.js';
 import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from '@/components/ui';
 import { ref } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
+
+import { data } from '../../../assets/js/database.js';
+
+function saveData(db){
+  data.getSavedHotels()
+  console.log(cityList)
+}
+
+
+
 
 function priceRangeSelect(min, max) {
   // console.log('minPrice: ', min )
