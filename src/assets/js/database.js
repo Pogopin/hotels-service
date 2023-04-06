@@ -1,23 +1,21 @@
 import { initializeApp } from 'firebase/app'
-import { Database, getDatabase, get, child, ref } from 'firebase/database'
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, doc } from 'firebase/firestore';
+
 import { firebaseConfig } from '../../firebase.js'
 
 class DatabaseService {
-    
     constructor() {
-        this.app = initializeApp(firebaseConfig);
-        this.db = getFirestore(this.app);
+        this.fireBaseApp = initializeApp(firebaseConfig);
+        this.db = getFirestore(this.fireBaseApp)
     }
     
     async getSavedHotels() {
-        const citiesCol = collection(this.db, 'hotels');
-        const citySnapshot = await getDocs(citiesCol);
-        const cityList = citySnapshot.docs.map(doc => doc.data());
-
-        console.log(cityList)
-        return cityList;
+        const querySnapshot = await getDocs(collection(this.db, 'hotels'));
+        querySnapshot.forEach((doc) => {
+        
+        console.log(doc.id, " => ", doc.data());
+        });
     }
 }
-
-export const data = new DatabaseService();
+const data = new DatabaseService();
+export {data}

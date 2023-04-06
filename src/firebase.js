@@ -1,6 +1,3 @@
-// import { initializeApp } from 'firebase/app';
-// import { getFirestore } from 'firebase/firestore';
-
 export const firebaseConfig = {
     apiKey: "AIzaSyDKgeuOkCBDoSsZ_NiatpoPpgTU7tt5vCI",
     authDomain: "vue-hotel-service.firebaseapp.com",
@@ -11,5 +8,3 @@ export const firebaseConfig = {
     appId: "1:352824939269:web:e97cde5b3b331a77bb5d6c"
     
 };
-// const app = initializeApp(firebaseConfig);
-// export const db = getFirestore(app)
