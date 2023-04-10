@@ -8,7 +8,7 @@
                   <BaseInput 
                     type="text"
                     class="form-control"
-                    placeholder="Destination, City"
+                    placeholder="Город"
                     id="checkin_dectination"
                     @update:value="changeCity"
                   />
@@ -21,8 +21,8 @@
                     <BaseSelect
                         id="city-select"
                         class="form-control"
-                        :options="[{name: 'San Francisco USA', value: 1},{name: 'Berlin Germany', value: 2},{name: 'Lodon UK', value: 3},{name: 'Paris France', value: 4}]"
-                        selected="Select Location"
+                        :options="[{name: 'Россия', value: 1},{name: 'Египед', value: 2},{name: 'Тайланд', value: 3},{name: 'Австрия', value: 4}]"
+                        selected="Страна"
                         @update:select="sel"
                     />
                   </div>
@@ -31,9 +31,9 @@
                   <BaseInput
                     type="text"
                     class="form-control"
-                    placeholder="Date from"
+                    placeholder="Дата с"
                     id="checkin_date_from"
-                    @focus="($event) => changeDate($event)"
+                    @focus="($event) => changeDate($event, 'dateFrom')"
                   />
                 </div>
                 <div class="form-group">
@@ -41,8 +41,8 @@
                     type="text"
                     id="checkin_date_to"
                     class="form-control"
-                    placeholder="Date to"
-                    @focus="($event) => changeDate($event)"
+                    placeholder="Дата до"
+                    @focus="($event) => changeDate($event, 'dateTo')"
                   />
                 </div>
                 <div class="form-group">
@@ -91,13 +91,6 @@ import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from '@/
 import { ref, onMounted } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
 
-import { data } from '../../../assets/js/database.js';
-
-onMounted(() => {
-  console.log('mounted');
-  data.getSavedHotels()
-})
-
 function priceRangeSelect(min, max) {
   // console.log('minPrice: ', min )
   // console.log('maxPrice: ', max )
@@ -105,22 +98,23 @@ function priceRangeSelect(min, max) {
   searchParams.value.maxPriceValue = max;
 }
 
-function changeDate(nameSelector) {
+function changeDate(nameSelector, searchProperty) {
   const idInput = nameSelector.target.id;
-  console.log(idInput);
-  dataIn(idInput);
+  dataIn(idInput, (date)=> {
+    searchParams.value[searchProperty] = date;
+    // console.log(date)
+  });
+  
 }
 function changeCity(val) {
   searchParams.value.city = val;
 };
 function sel(value) {
-  console.log(value);
+  // console.log(value);
   searchParams.value.country = value;
 };
 function exist(value, property) {
   searchParams.value.starRating[property].checked = value;
-
-  console.log(value, property);
 };
 function currentComponent (name) {
     return markRaw(components[name])
@@ -128,6 +122,8 @@ function currentComponent (name) {
 const searchParams = ref({
   city: '',
   country: '',
+  dateFrom: '',
+  dateTo: '',
   minPriceValue: 0,
   maxPriceValue: 1000,
   starRating: {

@@ -37,9 +37,14 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-// import { dataIn } from '@/assets/js/picker.js';
 import { HotelsList, Sidebar } from '@/components/widgets';
 import { hotels } from '@/config/hotels.js';
+import { data } from '../../assets/js/database.js';
+
+onMounted(() => {
+  console.log('mounted');
+  data.getSavedHotels()
+})
 
 
 </script>
