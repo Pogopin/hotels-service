@@ -2,7 +2,8 @@
     <div class="col-md-4">
     <div class="destination">
       <a class="" href="#">
-        <img class="img img-2" :src="getImageUrl(props.hotelData.img)" alt="image">
+        <!-- <img class="img img-2" :src="getImageUrl(props.hotelData.img)" alt="image"> -->
+        <img class="img img-2" :src="props.hotelData.img">
         <div class="icon d-flex justify-content-center align-items-center">
           <span class="icon-search2"></span>
         </div>

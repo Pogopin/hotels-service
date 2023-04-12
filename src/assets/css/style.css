@@ -7786,7 +7786,7 @@ h1, h2, h3, h4, h5,
     border-top: 1px solid transparent;
     background: #fff; }
     .destination .text h3 {
-      font-size: 18px; }
+      font-size: 14px; }
       .destination .text h3 a {
         color: #000000; }
     .destination .text span.listing {
@@ -7798,7 +7798,7 @@ h1, h2, h3, h4, h5,
       padding-left: 5px;
       font-size: 10px; }
     .destination .text .one {
-      width: calc(100% - 70px); }
+      width: calc(100%); }
     .destination .text .two {
       width: 70px;
       text-align: right; }
@@ -7807,7 +7807,7 @@ h1, h2, h3, h4, h5,
         font-size: 18px;
         color: #2f89fc; }
       .destination .text .two .per-price {
-        font-size: 20px;
+        font-size: 14px;
         line-height: 1.4; }
         .destination .text .two .per-price small {
           font-size: 12px; }

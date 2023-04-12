@@ -21,7 +21,7 @@
                     <BaseSelect
                         id="city-select"
                         class="form-control"
-                        :options="[{name: 'Россия', value: 1},{name: 'Египед', value: 2},{name: 'Тайланд', value: 3},{name: 'Австрия', value: 4}]"
+                        :options="[{name: 'Россия', value: 1},{name: 'Египет', value: 2},{name: 'Тайланд', value: 3},{name: 'Австрия', value: 4}]"
                         selected="Страна"
                         @update:select="sel"
                     />
@@ -92,8 +92,6 @@ import { ref, onMounted } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
 
 function priceRangeSelect(min, max) {
-  // console.log('minPrice: ', min )
-  // console.log('maxPrice: ', max )
   searchParams.value.minPriceValue = min;
   searchParams.value.maxPriceValue = max;
 }
@@ -102,9 +100,7 @@ function changeDate(nameSelector, searchProperty) {
   const idInput = nameSelector.target.id;
   dataIn(idInput, (date)=> {
     searchParams.value[searchProperty] = date;
-    // console.log(date)
   });
-  
 }
 function changeCity(val) {
   searchParams.value.city = val;

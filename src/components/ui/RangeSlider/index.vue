@@ -55,28 +55,6 @@ const props = defineProps({
     }
 })
 </script>
-<!-- <div class="range-slider">
-                    <span>
-                      <input type="number" value="25000" min="0" max="120000" />
-                      -
-                      <input type="number" value="50000" min="0" max="120000" />
-                    </span>
-                    <input
-                      value="1000"
-                      min="0"
-                      max="120000"
-                      step="500"
-                      type="range"
-                    />
-                    <input
-                      value="50000"
-                      min="0"
-                      max="120000"
-                      step="500"
-                      type="range"
-                    />
-                    
-                  </div> -->
 <style scoped>
 
 </style>
