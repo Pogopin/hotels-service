@@ -10,7 +10,7 @@
               :hotelsList="hotels"
             />
           </div>
-          <!-- {{hotels}} -->
+          {{hotels}}
 
           <!-- <div class="row mt-5">
 		          <div class="col text-center">
@@ -36,7 +36,7 @@
 </style>
 
 <script setup>
-import { onBeforeMount, ref, computed } from 'vue';
+import { onBeforeMount, onMounted, ref, computed } from 'vue';
 import { HotelsList, Sidebar } from '@/components/widgets';
 import { useHotelsStore } from '@/stores/hotelsStore.js';
 // import { hotels } from '@/config/hotels.js';
@@ -47,12 +47,12 @@ const hotels = computed(() => hotelsStore.getHotelsData);
 
 onBeforeMount(() => {
   console.log('beforeMounted');
-  data.getSavedHotels();
-
-  // data.getFirebaseStorage ();
+  hotelsStore.getHotels();
   
-  // console.log(hotels.value)
 })
+// onMounted(() => {
+//   hotelsStore.getHotels();
+// })
 
 
 </script>
