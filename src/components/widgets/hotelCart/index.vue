@@ -2,8 +2,7 @@
     <div class="col-md-4">
     <div class="destination">
       <a class="" href="#">
-        <!-- <img class="img img-2" :src="getImageUrl(props.hotelData.img)" alt="image"> -->
-        <img class="img img-2" :src="props.hotelData.images">
+        <img class="img img-2" :src="props.hotelData.fullPath">
         <div class="icon d-flex justify-content-center align-items-center">
           <span class="icon-search2"></span>
         </div>
@@ -41,7 +40,4 @@ import { defineProps } from 'vue';
 const props = defineProps({
     hotelData: Object,
 })
-function getImageUrl (name) {
-    return new URL('../../../assets/images/' + name, import.meta.url).href
-}
 </script>
