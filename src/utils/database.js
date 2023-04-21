@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, query, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import { firebaseConfig } from '../firebase.js';
