@@ -14,5 +14,4 @@ import { HotelCart } from '@/components/widgets';
 const props = defineProps({
     hotelsList: Object
 })
-console.log(props.hotelsList)
 </script>
