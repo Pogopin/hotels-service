@@ -7,28 +7,14 @@ export const useHotelsStore = defineStore(id, {
   state: () => {
     return {
       hotelsList: [],
-<<<<<<< HEAD
-=======
       
->>>>>>> feature/firebase
     }
   },
   getters: {
-    getHotelsList: (state) => state.hotelsList,
+    getHotelsData: (state) => state.hotelsList
   },
   actions: {
     async fetchHotels() {
-<<<<<<< HEAD
-      await data.fetchDataRealTime()
-    },
-    async addHotelsInState (data) {
-      this.hotelsList = data
-      await this.convertImageUrl()
-    },
-    async convertImageUrl () {
-      this.hotelsList = await Promise.all([ ...this.hotelsList].map(async hotel => {
-        return { ...hotel, fullPath: await data.getImageFromStorage(hotel.img) };
-=======
       this.hotelsList.length = 0;
       await data.getSavedHotels();
     },
@@ -45,7 +31,6 @@ export const useHotelsStore = defineStore(id, {
           })
         })
         return hotel;
->>>>>>> feature/firebase
       }))
     },
   }

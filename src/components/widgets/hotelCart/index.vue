@@ -1,15 +1,9 @@
 <template>
     <div class="col-md-4">
     <div class="destination">
-<<<<<<< HEAD
-      <a class="" href="#">
-        <img class="img img-2" :src="props.hotelData.fullPath">
-        <div class="icon d-flex justify-content-center align-items-center">
-=======
       <router-link :to="{name: 'info', params: {id: props.hotelData.id}}">
         <img class="img img-2" :src="props.hotelData.fullPath">
         <div class="icon d-flex justify-content-center align-items-center pos-center">
->>>>>>> feature/firebase
           <span class="icon-search2"></span>
         </div>
                      
@@ -47,6 +41,9 @@ import { defineProps } from 'vue';
 const props = defineProps({
     hotelData: Object,
 })
+function getImageUrl (name) {
+    return new URL('../../../assets/images/' + name, import.meta.url).href
+}
 </script>
 <style scoped>
 .pos-center {
