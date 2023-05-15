@@ -6,6 +6,7 @@ import { firebaseConfig } from '../firebase.js';
 import { useHotelsStore } from '@/stores/hotelsStore.js';
 
 class DatabaseService {
+<<<<<<< HEAD
     
   constructor() {
     this.fireBaseApp = initializeApp(firebaseConfig);
@@ -36,6 +37,33 @@ class DatabaseService {
         console.log('get - image - from - storage', error)
       });    
   }
+=======
+    constructor() {
+        this.fireBaseApp = initializeApp(firebaseConfig);
+        this.db = getFirestore(this.fireBaseApp);
+        this.storage = getStorage();
+    }
+    
+    async getSavedHotels() {
+        const querySnapshot = await getDocs(collection(this.db, 'hotels'));
+        return querySnapshot.forEach((doc) => {
+            let obj = {id: doc.id, ...doc.data()}
+
+            const hotelStore = useHotelsStore();
+            hotelStore.pushHotels(obj);
+        })
+        //--------------------------------------------------
+    }
+    async getFirebaseStorage (data) {// метод для получения URL из Firebase Storage
+        return await getDownloadURL(ref(this.storage, `${data}`))
+            .then((url) => {
+                return url
+            })
+            .catch((error) => {
+                console.log(error)
+            });    
+    }
+>>>>>>> feature/firebase
 }
 
 const data = new DatabaseService();

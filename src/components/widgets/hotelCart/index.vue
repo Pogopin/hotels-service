@@ -1,12 +1,20 @@
 <template>
     <div class="col-md-4">
     <div class="destination">
+<<<<<<< HEAD
       <a class="" href="#">
         <img class="img img-2" :src="props.hotelData.fullPath">
         <div class="icon d-flex justify-content-center align-items-center">
+=======
+      <router-link :to="{name: 'info', params: {id: props.hotelData.id}}">
+        <img class="img img-2" :src="props.hotelData.fullPath">
+        <div class="icon d-flex justify-content-center align-items-center pos-center">
+>>>>>>> feature/firebase
           <span class="icon-search2"></span>
         </div>
-      </a>
+                     
+      </router-link>
+             
       <div class="text p-3">
         <div class="d-flex">
           <div class="one">
@@ -26,9 +34,8 @@
         </div>
         <p>{{props.hotelData.distance}}</p>
         <hr />
-        <p class="bottom-area d-flex">
-          <span><i class="icon-map-o"></i> Miami, Fl</span>
-          <span class="ml-auto"><a href="#">Book Now</a></span>
+        <p class="bottom-area">
+          <span class="book-now"><a href="#">Book Now</a></span>
         </p>
       </div>
     </div>
@@ -41,3 +48,15 @@ const props = defineProps({
     hotelData: Object,
 })
 </script>
+<style scoped>
+.pos-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 120%);
+}
+.book-now {
+  display: block;
+  text-align: center;
+}
+</style>
