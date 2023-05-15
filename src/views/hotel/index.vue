@@ -10,7 +10,7 @@
               :hotelsList="hotels"
             />
           </div>
-          {{hotels}}
+          <!-- {{hotels}} -->
 
           <!-- <div class="row mt-5">
 		          <div class="col text-center">
@@ -39,20 +39,14 @@
 import { onBeforeMount, onMounted, ref, computed } from 'vue';
 import { HotelsList, Sidebar } from '@/components/widgets';
 import { useHotelsStore } from '@/stores/hotelsStore.js';
-// import { hotels } from '@/config/hotels.js';
-import { data } from '@/utils/database.js';
+
 
 const hotelsStore = useHotelsStore();
-const hotels = computed(() => hotelsStore.getHotelsData);
-
 onBeforeMount(() => {
   console.log('beforeMounted');
-  hotelsStore.getHotels();
+  hotelsStore.fetchHotels();
   
 })
-// onMounted(() => {
-//   hotelsStore.getHotels();
-// })
-
+const hotels = computed(() =>  hotelsStore.getHotelsData);
 
 </script>

@@ -4,10 +4,8 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import { firebaseConfig } from '../firebase.js';
 import { useHotelsStore } from '@/stores/hotelsStore.js';
-import { onBeforeMount } from 'vue';
 
 class DatabaseService {
-    
     constructor() {
         this.fireBaseApp = initializeApp(firebaseConfig);
         this.db = getFirestore(this.fireBaseApp);
@@ -15,27 +13,19 @@ class DatabaseService {
     }
     
     async getSavedHotels() {
-        const fbHotels = [];
-        const q = query(collection(this.db, "hotels"));  
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            let copyHotelData = Object.assign({}, doc.data());
-            copyHotelData.id = doc.id;
-            
-            fbHotels.push(copyHotelData);
-        
-        });
-        return fbHotels;
+        const querySnapshot = await getDocs(collection(this.db, 'hotels'));
+        return querySnapshot.forEach((doc) => {
+            let obj = {id: doc.id, ...doc.data()}
+
+            const hotelStore = useHotelsStore();
+            hotelStore.pushHotels(obj);
+        })
         //--------------------------------------------------
     }
-    
     async getFirebaseStorage (data) {// метод для получения URL из Firebase Storage
-        const st = useHotelsStore()
-        await getDownloadURL(ref(this.storage, `${data}`))
+        return await getDownloadURL(ref(this.storage, `${data}`))
             .then((url) => {
-                // console.log(url)
-                st.setImageUrl(url)
-                // return url
+                return url
             })
             .catch((error) => {
                 console.log(error)

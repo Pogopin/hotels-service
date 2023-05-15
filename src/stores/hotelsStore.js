@@ -7,36 +7,31 @@ export const useHotelsStore = defineStore(id, {
   state: () => {
     return {
       hotelsList: [],
-      imagesUrlfromStorage: ''
+      
     }
   },
   getters: {
     getHotelsData: (state) => state.hotelsList
   },
   actions: {
-    setImageUrl(imageUrl) {
-      this.imagesUrlfromStorage = imageUrl;
+    async fetchHotels() {
+      this.hotelsList.length = 0;
+      await data.getSavedHotels();
     },
-    async getHotels () {
-      console.log('action');
-      const hotels = await data.getSavedHotels();
-
-      this.hotelsList = await Promise.all(hotels.map(async (hotel) => {
-        try {
-          const img = await data.getFirebaseStorage(hotel.img);
-          // console.log('image:', img) //почему-то undefined
-          
-          const imagesUrl = this.imagesUrlfromStorage;
-          const updatedHotel = {...hotel, images: imagesUrl};
-          // console.log(updatedHotel);
-          return updatedHotel;
-
-        } catch (error) {
-          console.error(`Error updating hotels list`, error);
-          return hotel;
-        }
-      }));
+    async pushHotels(hotel) {
+      this.hotelsList.push(hotel);
+      await this.setImageUrl();
     },
-    
+    async setImageUrl() {
+      await Promise.all(this.hotelsList.map(async hotel => {
+        hotel.fullPath = await data.getFirebaseStorage(hotel.img);
+        hotel.numbers.map(number => {
+          number.img.map(async item => {
+            item.photoImgUrl = await data.getFirebaseStorage(item.photo);
+          })
+        })
+        return hotel;
+      }))
+    },
   }
 })
