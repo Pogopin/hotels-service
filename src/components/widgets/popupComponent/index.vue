@@ -2,24 +2,16 @@
     <div class="popup">
         <div class="overlay"></div>
         <div class="popup-content">
-
             <slot/>
             <button class="popup-close-btn">Закрыть</button>
         </div>
     </div>
 </template>
-<script setup>
-import { SwiperSlider } from '@/components/widgets';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-
-</script>
-
 <style scoped>
 .popup-content{
     width: 600px;
     height: 500px;
     position: fixed;
-    /* border: 1px solid black; */
     left: 50%;
     top: 50%;
     z-index: 9;
