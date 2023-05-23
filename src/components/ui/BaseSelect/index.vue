@@ -1,23 +1,23 @@
 <template>
-    <div class="select-wrap">
+    <div class="select-wrap" :id="props.id">
         <p @click="optionsVisible = !optionsVisible">
-            {{selected}}
+            {{selected}}                       
         </p>
         <div class="options" v-if="optionsVisible">
-            <p class="options-item"
+            <p class="options-item" 
                 v-for="el in props.options"
-                :key="el.value"
-                @click="selectOptions(el.name)"
+                :key="el"
+                @click="selectOptions(el)"                
             >
-                {{el.name}}
-            </p>  
-        </div>
-
-    </div>
+                {{el}}
+            </p>              
+        </div>        
+    </div>    
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, defineEmits } from 'vue';
+import { defineProps, ref, onMounted, defineEmits, computed } from 'vue';
+import { useHotelsStore } from '@/stores/hotelsStore.js';
 
 const optionsVisible = ref(false);
 const selected = ref(props.selected);
@@ -29,7 +29,7 @@ const props = defineProps({
         default: []
     },
     selected: String,
-    title: String
+    title: String,    
 })
 const emits = defineEmits(['update:select']);
 function selectOptions(option) {
@@ -41,7 +41,7 @@ function selectOptions(option) {
 onMounted(()=> {
     window.addEventListener('click', (event) => {
         if (!event.target.closest('.select-wrap')) optionsVisible.value = false;
-    })
+    })    
 })
 </script>
 
@@ -55,7 +55,7 @@ onMounted(()=> {
     padding-top: 5px;
 }
 .options {
-    
+    z-index: 20;
     border: 2px solid black;
     position: absolute;
     width: 100%;

@@ -5,14 +5,19 @@
             <form class="form">
               <div class="fields">
                 <div class="form-group">
-                  <BaseInput 
-                    type="text"
-                    class="form-control"
-                    placeholder="Город"
-                    id="checkin_dectination"
-                    @update:value="changeCity"
-                  />
-                </div>
+                  <div class="select-wrap one-third">
+                    <div class="icon">
+                      <span class="ion-ios-arrow-down"></span>
+                    </div>
+                    <BaseSelect
+                        id="country-select"
+                        class="form-control"
+                        :options="['Россия','Египет','Тайланд','Австрия']"
+                        selected="Страна"
+                        @update:select="selectCountry"                                                
+                    />
+                  </div>
+                </div>                
                 <div class="form-group">
                   <div class="select-wrap one-third">
                     <div class="icon">
@@ -21,9 +26,9 @@
                     <BaseSelect
                         id="city-select"
                         class="form-control"
-                        :options="[{name: 'Россия', value: 1},{name: 'Египет', value: 2},{name: 'Тайланд', value: 3},{name: 'Австрия', value: 4}]"
-                        selected="Страна"
-                        @update:select="sel"
+                        :options="selectCityOptions"
+                        selected="Выберите город"
+                        @update:select="changeCity"                        
                     />
                   </div>
                 </div>
@@ -83,16 +88,22 @@
               </div>
             </form>
           </div>
+          <!-- {{searchParams}} -->
+          
         </div>
 </template>
 <script setup>
 import { dataIn } from '@/assets/js/picker.js';
 import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from '@/components/ui';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
+import { towns } from '@/config/city.js';
+
 function search () {
   console.log('Поиск')
 }
+const selectCityOptions = ref([]);
+// const choseCity = ref('Выберите город')
 
 function priceRangeSelect(min, max) {
   searchParams.value.minPriceValue = min;
@@ -108,8 +119,26 @@ function changeDate(nameSelector, searchProperty) {
 function changeCity(val) {
   searchParams.value.city = val;
 };
-function sel(value) {
+
+function selectCountry(value) {  
   searchParams.value.country = value;
+      
+  towns.forEach( item => {
+    if(item.country === value) {
+      selectCityOptions.value = item.city;
+            
+    }
+  })
+  towns.forEach( el => {
+    if(el.country === value) {
+      if(!el.city.includes(searchParams.value.city)) {
+        // console.log('нет такого города в этой стране')
+        const cityInput = document.querySelector('#city-select > p' );        
+        cityInput.innerText = 'Выберите город';
+        searchParams.value.city = null;
+      }
+    }
+  })  
 };
 function exist(value, property) {
   searchParams.value.starRating[property].checked = value;

@@ -42,9 +42,9 @@ import { useHotelsStore } from '@/stores/hotelsStore.js';
 
 
 const hotelsStore = useHotelsStore();
-onBeforeMount(() => {
+onBeforeMount(async () => {
   console.log('beforeMounted');
-  hotelsStore.fetchHotels();
+  await hotelsStore.fetchHotels();
   
 })
 const hotels = computed(() =>  hotelsStore.getHotelsData);

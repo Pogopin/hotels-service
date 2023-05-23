@@ -58,8 +58,7 @@
                 
               </div>
               <h1 v-else>Данные загружаются</h1>              
-							<!-- {{hotelInfo}} -->
-							
+							<!-- {{hotelInfo}} -->              							
             </div>
         </div>
         <!-- В попап передаем реактивную переменную inPopupSlides со слайдами, полученной из функции sliderClick-->
@@ -93,11 +92,11 @@ import { defineProps, computed, onBeforeMount, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 
+// здесь получаем через getter из store данные об отеле!
+const hotelsStore = useHotelsStore();
+const hotelInfo = computed(()=> hotelsStore.getHotelInfo);
 const route = useRoute();
 const id = computed(()=>  route.params.id);
-const hotelsStore = useHotelsStore();
-const hotelsList = computed(()=> hotelsStore.getHotelsData);
-const hotelInfo = computed(()=> hotelsList.value.find(hotel => hotel.id === id.value));
 
 const isPopupVisible = ref(false);
 const inPopupSlides = ref([]);
@@ -105,13 +104,16 @@ const inPopupSlides = ref([]);
 function sliderClick (sl) {
   isPopupVisible.value = true;
   inPopupSlides.value = sl.img;
-
 }
 onMounted(()=> {
     window.addEventListener('click', (event) => {
         if (event.target.closest('.popup-close-btn')) isPopupVisible.value = false;
-    })
+    });        
+    hotelsStore.fetchHotelById(id.value);
 })
+// const hotelsList = computed(()=> hotelsStore.getHotelsData);
+// const hotelInfo = computed(()=> hotelsList.value.find(hotel => hotel.id === id.value));
+
 </script>
 <style scoped>
 .booking-btn {
