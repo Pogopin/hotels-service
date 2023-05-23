@@ -58,9 +58,9 @@
                   <BaseButton
                     text="Search"
                     modifyStyle="btn-primary py-3 px-5"
+                    @click.prevent="search"
                   />
-                </div>
-                
+                </div>                
               </div>
             </form>
           </div>
@@ -90,6 +90,9 @@ import { dataIn } from '@/assets/js/picker.js';
 import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from '@/components/ui';
 import { ref, onMounted } from 'vue';
 import { checkBoxConf } from '@/config/checkBoxConfig.js';
+function search () {
+  console.log('Поиск')
+}
 
 function priceRangeSelect(min, max) {
   searchParams.value.minPriceValue = min;
@@ -99,14 +102,13 @@ function priceRangeSelect(min, max) {
 function changeDate(nameSelector, searchProperty) {
   const idInput = nameSelector.target.id;
   dataIn(idInput, (date)=> {
-    searchParams.value[searchProperty] = date;
+    searchParams.value[searchProperty] = date;    
   });
 }
 function changeCity(val) {
   searchParams.value.city = val;
 };
 function sel(value) {
-  // console.log(value);
   searchParams.value.country = value;
 };
 function exist(value, property) {

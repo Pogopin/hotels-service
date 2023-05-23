@@ -16,3 +16,12 @@ const props = defineProps({
 })
 
 </script>
+<style scoped>
+.booking-button {
+    background-color: #105de4;
+    color: #FFF;
+}
+.booking-button:hover {
+    background-color: #0d3b8a;
+}
+</style>

@@ -1,12 +1,23 @@
 <template>
     <div class="container">
-        <h1>привет Пятачок</h1>
-        <h1>Home page</h1>
+        <h1 class="service__title">Сервис поиска и бронирования отелей</h1>
+        <SwiperSlider
+            :slides="slides"                       
+        />
     </div>
+    <Service />
     
 </template>
 <style scoped>
-h1 {
+</style>
+<script setup>
+import { SwiperSlider, Service } from '@/components/widgets';
+import { slides } from '@/config/slidesHomePageConfig.js';
+
+</script>
+<style scoped>
+.service__title {
     margin-top: 50px;
+    text-align: center;
 }
 </style>
