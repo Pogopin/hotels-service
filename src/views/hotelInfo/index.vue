@@ -9,19 +9,12 @@
             <img :src="hotelInfo.fullPath" alt="image" />
             <h4 class="hotel-title">Доступные номера отеля</h4>
             <div class="numbers">
-              <div
-                class="number__content"
-                v-for="num in hotelInfo.numbers"
-                :key="num.name"
-              >
+              <div class="number__content" v-for="num in hotelInfo.numbers" :key="num.name">
                 <div class="numbers__content-item item-content">
                   <div class="item-content-slider">
                     <SwiperSlider @click="sliderClick(num)">
                       <template #default>
-                        <swiper-slide
-                          v-for="slide in num.img"
-                          :key="slide.photo"
-                        >
+                        <swiper-slide v-for="slide in num.img" :key="slide.photo">
                           <div>
                             <img :src="slide.photoImgUrl" alt="" />
                           </div>

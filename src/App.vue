@@ -8,9 +8,8 @@
   </div>
 </template>
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
-import AppLayout from './layouts/AppLayout.vue';
-
+import { RouterView } from "vue-router";
+import AppLayout from "./layouts/AppLayout.vue";
 </script>
 
 <style scoped>
@@ -29,4 +28,3 @@ import AppLayout from './layouts/AppLayout.vue';
   border: 1px solid red;
 }
 </style>
-
