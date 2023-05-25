@@ -113,6 +113,7 @@ function changeCity(val) {
   searchParams.value.city = val;
 }
 
+// TODO : попробовать оптимизировать
 function selectCountry(value) {
   searchParams.value.country = value;
 
@@ -125,7 +126,7 @@ function selectCountry(value) {
     if (el.country === value) {
       if (!el.city.includes(searchParams.value.city)) {
         // console.log('нет такого города в этой стране')
-        const cityInput = document.querySelector("#city-select > p");
+        const cityInput = document.querySelector("#city-select");
         cityInput.innerText = "Выберите город";
         searchParams.value.city = null;
       }

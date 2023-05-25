@@ -1,6 +1,6 @@
 <template>
-  <div class="select-wrap" :id="props.id">
-    <p @click="optionsVisible = !optionsVisible">
+  <div class="select-wrap">
+    <p :id="props.id" @click="optionsVisible = !optionsVisible">
       {{ selected }}
     </p>
     <div class="options" v-if="optionsVisible">
@@ -21,7 +21,7 @@ const props = defineProps({
   id: String,
   options: {
     type: Array,
-    default: () =>([]),
+    default: () => [],
   },
   selected: String,
   title: String,

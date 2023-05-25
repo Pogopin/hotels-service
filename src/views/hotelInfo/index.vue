@@ -95,6 +95,7 @@ function sliderClick(sl) {
   inPopupSlides.value = sl.img;
 }
 onMounted(() => {
+  // TODO : пофиксить
   window.addEventListener("click", (event) => {
     if (event.target.closest(".popup-close-btn")) isPopupVisible.value = false;
   });
