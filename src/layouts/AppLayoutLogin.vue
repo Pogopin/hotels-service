@@ -1,5 +1,5 @@
 <script setup>
-import { BaseButton } from '@/components/ui'
+import { BaseButton } from "@/components/ui";
 </script>
 
 <template>
@@ -23,14 +23,13 @@ import { BaseButton } from '@/components/ui'
       <div>
         <div>LOGIN LAYOUT</div>
         <p>Email</p>
-        <input type="text">
+        <input type="text" />
         <p>Password</p>
-        <input type="text">
+        <input type="text" />
       </div>
-      
 
       <div class="wrapper w-full h-screen flex justify-center items-center bg-sky-300">
-        <slot/>
+        <slot />
       </div>
     </main>
   </div>
