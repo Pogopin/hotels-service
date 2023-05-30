@@ -62,7 +62,7 @@
             </div>
         </div>
         <!-- В попап передаем реактивную переменную inPopupSlides со слайдами, полученной из функции sliderClick-->
-        <Popup
+        <Popup          
           v-show="isPopupVisible"
         >
           <SwiperSlider
@@ -75,11 +75,14 @@
                   <div>
                     <img :src="slide.photoImgUrl" alt="" />
                   </div>
-              </swiper-slide>                                                 
+              </swiper-slide>
+              <button 
+                @click="isPopupVisible = false"
+                class="popup-close-btn">Закрыть
+              </button>                                                 
             </template>
           </SwiperSlider>
         </Popup>
-
       </div>
     </section>
 </template>
@@ -105,17 +108,19 @@ function sliderClick (sl) {
   isPopupVisible.value = true;
   inPopupSlides.value = sl.img;
 }
-onMounted(()=> {
-    window.addEventListener('click', (event) => {
-        if (event.target.closest('.popup-close-btn')) isPopupVisible.value = false;
-    });        
+onMounted(()=> {    
     hotelsStore.fetchHotelById(id.value);
 })
 // const hotelsList = computed(()=> hotelsStore.getHotelsData);
 // const hotelInfo = computed(()=> hotelsList.value.find(hotel => hotel.id === id.value));
-
 </script>
 <style scoped>
+.popup-close-btn {
+    position: fixed;
+    top: 25px;
+    right: 0;
+    cursor: pointer;
+}
 .booking-btn {
   display: block;
   margin: 0 auto;
@@ -138,6 +143,7 @@ onMounted(()=> {
   border: 1px solid #e9eaea;
   border-radius: 3px;
   margin-bottom: 20px;
+  padding: 10px;
 }
 .numbers__content p {
   margin-bottom: 0;

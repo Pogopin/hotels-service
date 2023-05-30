@@ -2,8 +2,7 @@
     <div class="popup">
         <div class="overlay"></div>
         <div class="popup-content">
-            <slot/>
-            <button class="popup-close-btn">Закрыть</button>
+            <slot/>            
         </div>
     </div>
 </template>
@@ -17,12 +16,6 @@
     z-index: 9;
     transform: translate3d(-50%, -50%, 0);
     transition: opacity .4s ease;
-}
-.popup-close-btn {
-    position: absolute;
-    top: 25px;
-    right: 0;
-    cursor: pointer;
 }
 .overlay {
     position: fixed;

@@ -38,12 +38,10 @@
 import { onMounted, defineProps } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Navigation  } from 'swiper';
-// import {  Navigation  } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 
 const modules = [Autoplay, Navigation ];
-// const modules = [ Navigation ];
 const props = defineProps({
     slides: Array,
     isPrevArrowVisible: Boolean,
@@ -68,16 +66,18 @@ function activeSlide(event) {
     cursor: pointer;
     
 }
-.swiper-button-prev {
+.swiper-button-prev,.swiper-button-next {
+    transform: translateY(-50%);
     position: absolute;
     top: 50%;
     z-index: 9;
+}
+
+
+.swiper-button-prev {    
     left: 20px;
 }
-.swiper-button-next {
-    position: absolute;
-    top: 50%;
-    z-index: 9;
+.swiper-button-next {    
     right: 20px;
 }
 </style>

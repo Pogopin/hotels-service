@@ -23,11 +23,11 @@
               <i class="icon-star-o"></i>
               <span>{{props.hotelData.rating}}</span>
             </p>
-          </div>
-          <div class="two">
-            <span class="price per-price">{{props.hotelData.price}}<br /><small>/night</small></span>
-          </div>
+          </div>          
         </div>
+        <div class="two">            
+            <span class="price per-price">{{props.hotelData.price}}/night</span>
+          </div>
         <p>{{props.hotelData.distance}}</p>
         <hr />
         <p class="bottom-area">
