@@ -2,13 +2,10 @@
   <section class="ftco-section ftco-degree-bg">
     <div class="container">
       <div class="row">
-        <Sidebar
-        />
+        <Sidebar />
         <div class="col-lg-9">
           <div class="row">
-            <HotelsList
-              :hotelsList="hotels"
-            />
+            <HotelsList :hotelsList="hotels" />
           </div>
           <!-- {{hotels}} -->
 
@@ -32,21 +29,17 @@
     </div>
   </section>
 </template>
-<style scoped>
-</style>
+<style scoped></style>
 
 <script setup>
-import { onBeforeMount, onMounted, ref, computed } from 'vue';
-import { HotelsList, Sidebar } from '@/components/widgets';
-import { useHotelsStore } from '@/stores/hotelsStore.js';
-
+import { onBeforeMount, computed } from "vue";
+import { HotelsList, Sidebar } from "@/components/widgets";
+import { useHotelsStore } from "@/stores/hotelsStore.js";
 
 const hotelsStore = useHotelsStore();
-onBeforeMount(() => {
-  console.log('beforeMounted');
-  hotelsStore.fetchHotels();
-  
-})
-const hotels = computed(() =>  hotelsStore.getHotelsData);
-
+onBeforeMount(async () => {
+  console.log("beforeMounted");
+  await hotelsStore.fetchHotels();
+});
+const hotels = computed(() => hotelsStore.getHotelsData);
 </script>
