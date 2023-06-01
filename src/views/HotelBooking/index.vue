@@ -1,0 +1,248 @@
+<template>
+    <div class="booking__service">
+        <div class="container">
+          <div class="booking__service-content content-service">
+            <div class="content-service__item item">
+              <div class="item__info-wrap">
+                <div class="item__info-img">
+                  <img src="https://firebasestorage.googleapis.com/v0/b/vue-hotel-service.appspot.com/o/hotels%2Fcoral-hills-resort%2Fcoral-preview.jpeg?alt=media&token=6b61fb28-e93b-4098-a953-564706628a2b" alt="">
+                </div>
+                <div class="item__info-number number">
+                  <h5 class="hotel-name">{{hotelInfo.name}}</h5>
+                  <p class="hotel-address">{{hotelInfo.addres}}</p>
+
+                  <div>
+                    <!-- <p class="number-name">{{hotelInfo.numbers[0].name}}</p> -->
+                    <p class="number-name">{{numberInfo.name}}</p>
+                  </div>
+                </div>
+                <div class="item__info-booking booking">
+                  <div class="booking-from">Заезд с 10-00</div>
+                  <div class="booking-from-date">{{bookingParams.dateFrom}}</div>
+
+                  <div class="booking-to">Выезд с 10-00</div>
+                  <div class="booking-to-date">{{bookingParams.dateTo}}</div>
+                </div>
+
+              </div>
+              <div class="item__info-description-wrap number">
+                  <p class="number-description">{{numberInfo.description}}</p>
+                  <p class="number-info">{{numberInfo.info}}</p>
+              </div>
+
+            </div>
+
+            <div class="content-service__item item">
+              <div class="item__number-tarif tarif">
+                <p class="tarif__price">Cтоимость номера:</p>
+                <p class="tarif__price-cash">1x {{numberInfo.price}}</p>
+                <div class="tarif__info">для 2 взрослых на 1 ночь</div>
+                <div>Оплата сейчас в валюте:</div>
+                <div> Российский рубль</div>
+                <div v-if="isNaN(differenceInDays)">{{numberInfo.price}}</div>
+                <div v-else>{{numberInfo.price.replace(/[^+\d]/g, '') * differenceInDays}} ₽</div>
+
+              </div>
+
+            </div>
+
+          </div>
+          <form class="form__booking">
+            <div class="fields">
+              <div class="form-input">
+                <BaseInput
+                  type="email"
+                  class="form-control"
+                  placeholder="email"
+                  id="email"
+
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  class="form-control"
+                  placeholder="Имя"
+                  id="name"
+
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  class="form-control"
+                  placeholder="Фамилия"
+                  id="surname"
+
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  class="form-control"
+                  placeholder="Телефон для связи"
+                  id="phone"
+
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  id="date_from"
+                  class="form-control"
+                  placeholder="Дата заезда"
+                  @focus="($event) => changeDate($event, 'dateFrom')"
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  id="date_to"
+                  class="form-control"
+                  placeholder="Дата выезда"
+                  @focus="($event) => changeDate($event, 'dateTo')"
+                />
+              </div>
+              <div class="form-input">
+                <BaseButton text="Забронировать" modifyStyle="btn-primary py-3 px-5" @click.prevent="bookingNumber" />
+              </div>
+
+            </div>
+          </form>
+        <!-- {{hotelInfo}} -->
+        <!-- {{numberInfo}} -->
+
+        </div>
+    </div>
+</template>
+<style scoped>
+.booking__service {
+  margin-top: 60px;
+
+}
+.booking__service-content {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.content-service__item {
+  padding: 20px;
+  background-color: white;
+}
+.item__info-wrap {
+  display: flex;
+  gap: 30px;
+  border-bottom: 1px solid rgb(223, 214, 214);
+}
+.item__info-img {
+  max-width: 150px;
+
+}
+.hotel-name {
+  margin-bottom: 0;
+}
+.hotel-address {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+.item__info-description-wrap {
+  display: flex;
+  margin-top: 20px;
+}
+.number-description {
+  margin-right: 50px;
+}
+.number-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+.item__info-number {
+  padding-right: 20px;
+  border-right: 1px solid rgb(223, 214, 214);
+}
+.tarif__price {
+  margin-right: 30px;
+
+}
+.item__number-tarif p {
+  display: inline-block;
+  margin-bottom: 0;
+}
+.booking-from, .booking-to {
+  font-size: 13px;
+  font-weight: 600;
+}
+.booking-from-date {
+  margin-bottom: 20px;
+}
+.tarif__info {
+  color: #868686;
+  font-size: 12px;
+  margin-bottom: 30px;
+}
+.form__booking {
+  margin: 0 auto;
+  max-width: 600px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: white;
+}
+.form-input {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-align: center;
+}
+</style>
+<script setup>
+import { BaseInput, BaseButton} from "@/components/ui";
+import { dataIn } from "@/assets/js/picker.js";
+import { defineProps, computed, onBeforeMount, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHotelsStore } from '../../stores/hotelsStore.js';
+import { data } from "@/utils/database.js";
+
+const hotelsStore = useHotelsStore();
+const hotelInfo = computed(()=> hotelsStore.getHotelInfo);
+const route = useRoute();
+const id = computed(()=>  route.params.id);
+const number = computed(()=> route.params.num);
+
+const numberInfo = computed(() => {
+      if (number.value) {
+        const numberIndex = Number(number.value);
+        return hotelInfo.value.numbers[numberIndex];
+      }
+      return null;
+  });
+
+onMounted(()=> {
+  hotelsStore.fetchHotelById(id.value);
+})
+function bookingNumber() {
+  data.setNumberBookingDate(id.value)
+  console.log(id.value)
+}
+
+function changeDate(nameSelector, searchProperty) {
+  const idInput = nameSelector.target.id;
+  dataIn(idInput, (date) => {
+    bookingParams.value[searchProperty] = date;
+  });
+}
+const bookingParams = ref({
+  email: '',
+  name: '',
+  surname: '',
+  dateFrom: '',
+  dateTo: '',
+})
+//расчет разницы дней из выбранных дат
+const date1 = computed(() => new Date(bookingParams.value.dateFrom));
+const date2 = computed(() => new Date(bookingParams.value.dateTo));
+
+const timeDiff = computed(() => Math.abs(date2.value.getTime() - date1.value.getTime()));
+const differenceInDays = computed(() => Math.ceil(timeDiff.value / (1000 * 3600 * 24)));
+
+</script>
+

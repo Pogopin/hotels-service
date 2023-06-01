@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
@@ -46,6 +46,16 @@ class DatabaseService {
       hotelsStore.addHotelInfoInState(docData);
       // console.log(docData)
     });
+  }
+  async setNumberBookingDate(id) {
+    const numberRef = doc(collection(this.db, "hotels"), id);
+
+    await updateDoc(numberRef, {
+      newP: 'xxxx'
+    }
+
+    );
+
   }
 }
 
