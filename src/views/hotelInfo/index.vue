@@ -41,7 +41,6 @@
                       <div class="item-content-price">
                           <span>Цена: {{num.price}}<p>за ночь для 2 гостей</p></span>
                       </div>
-
                     </div>
                     <p class="numbers__content-description">{{num.description}}</p>
                     <p class="numbers__content-info">{{num.info}}</p>
@@ -53,15 +52,22 @@
                         class="booking-btn"
                         text="Забронировать"
                         modifyStyle="booking-button"
+                        :disabled = hotelInfo.numbers[index].booking
                       />
                       </router-link>
                     </div>
+                    <div class="text-booking"
+                      v-if="hotelInfo.numbers[index].booking"
+                    >Номер уже забронирован</div>
+
+                    <!-- {{hotelInfo.numbers[index].booking}} -->
+                    <!-- забронирован номер или нет! -->
                   </div>
                 </div>
-
               </div>
               <h1 v-else>Данные загружаются</h1>
 							<!-- {{hotelInfo}} -->
+
             </div>
         </div>
         <!-- В попап передаем реактивную переменную inPopupSlides со слайдами, полученной из функции sliderClick-->
@@ -94,7 +100,7 @@ import { BaseButton } from '@/components/ui';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Sidebar, Popup } from '@/components/widgets';
 import { SwiperSlider } from '@/components/widgets';
-import { defineProps, computed, onBeforeMount, onMounted, ref } from 'vue';
+import { defineProps, computed, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 
@@ -111,8 +117,8 @@ function sliderClick (sl) {
   isPopupVisible.value = true;
   inPopupSlides.value = sl.img;
 }
-onMounted(()=> {
-    hotelsStore.fetchHotelById(id.value);
+onBeforeMount(async()=> {
+    await hotelsStore.fetchHotelById(id.value);
 })
 // const hotelsList = computed(()=> hotelsStore.getHotelsData);
 // const hotelInfo = computed(()=> hotelsList.value.find(hotel => hotel.id === id.value));
@@ -204,5 +210,10 @@ onMounted(()=> {
 }
 .info-hotel-name {
   font-size: 18px;
+}
+.text-booking {
+  text-align: center;
+  font-size: 20px;
+  color: red;
 }
 </style>

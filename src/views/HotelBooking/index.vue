@@ -197,7 +197,7 @@
 <script setup>
 import { BaseInput, BaseButton} from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
-import { defineProps, computed, onBeforeMount, onMounted, ref } from 'vue';
+import { defineProps, computed, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 import { data } from "@/utils/database.js";
@@ -208,19 +208,26 @@ const route = useRoute();
 const id = computed(()=>  route.params.id);
 const number = computed(()=> route.params.num);
 
-const numberInfo = computed(() => {
-      if (number.value) {
+const numberInfo = computed(() => { // это объект выбранного номера для отображения на странице, полученный из hotelInfo.numbers[]
+      if (Object.keys(hotelInfo.value).length !== 0) {
         const numberIndex = Number(number.value);
         return hotelInfo.value.numbers[numberIndex];
       }
       return null;
   });
 
-onMounted(()=> {
-  hotelsStore.fetchHotelById(id.value);
+onBeforeMount(async ()=> {
+  await hotelsStore.fetchHotelById(id.value);
 })
-function bookingNumber() {
-  data.setNumberBookingDate(id.value)
+async function bookingNumber() {
+  const numberIndex = Number(number.value);
+  //новый массив numbers с обновленными данными
+  const updateNumbers = hotelInfo.value.numbers;
+  updateNumbers[numberIndex].booking = true;
+  updateNumbers[numberIndex].dateFrom = bookingParams.value.dateFrom;
+  updateNumbers[numberIndex].dateTo = bookingParams.value.dateTo;
+
+  await data.setNumberBookingDate(id.value, updateNumbers);
   console.log(id.value)
 }
 

@@ -47,14 +47,16 @@ class DatabaseService {
       // console.log(docData)
     });
   }
-  async setNumberBookingDate(id) {
+  async setNumberBookingDate(id, updateNumbersArray) {
     const numberRef = doc(collection(this.db, "hotels"), id);
-
-    await updateDoc(numberRef, {
-      newP: 'xxxx'
+    try {
+      await updateDoc(numberRef, {
+        numbers: updateNumbersArray
+      });
+      console.log('Массив numbers успешно обновлен.');
+    } catch (error) {
+      console.error('Ошибка при обновлении массива numbers:', error);
     }
-
-    );
 
   }
 }
