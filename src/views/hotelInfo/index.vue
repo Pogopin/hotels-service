@@ -11,21 +11,21 @@
                 <h4 class="hotel-title">Доступные номера отеля</h4>
                 <div class="numbers">
                   <div class="number__content"
-                    v-for="num in hotelInfo.numbers" :key="num.name"
+                    v-for="(num, index) in hotelInfo.numbers" :key="num.name"
                   >
                     <div class="numbers__content-item item-content">
-                      <div class="item-content-slider">                        
+                      <div class="item-content-slider">
                         <SwiperSlider
                           @click="sliderClick(num)"
-                        >                          
+                        >
                           <template #default>
-                            <swiper-slide                              
+                            <swiper-slide
                               v-for="(slide) in num.img" :key="slide.photo">
                               <div>
                                 <img :src="slide.photoImgUrl" alt="" />
                               </div>
-                            </swiper-slide>                            
-                          </template>                          
+                            </swiper-slide>
+                          </template>
                         </SwiperSlider>
                       </div>
                       <div class="item-content-info info">
@@ -40,29 +40,38 @@
                       </div>
                       <div class="item-content-price">
                           <span>Цена: {{num.price}}<p>за ночь для 2 гостей</p></span>
-                      </div>                      
-                      
+                      </div>
                     </div>
                     <p class="numbers__content-description">{{num.description}}</p>
                     <p class="numbers__content-info">{{num.info}}</p>
 
                     <div class="form-group">
+                      <router-link :to="{name: 'booking', params: {id: id, num: index }}"
+                      >
                       <BaseButton
                         class="booking-btn"
                         text="Забронировать"
                         modifyStyle="booking-button"
+                        :disabled = hotelInfo.numbers[index].booking
                       />
+                      </router-link>
                     </div>
-                  </div>                
+                    <div class="text-booking"
+                      v-if="hotelInfo.numbers[index].booking"
+                    >Номер уже забронирован</div>
+
+                    <!-- {{hotelInfo.numbers[index].booking}} -->
+                    <!-- забронирован номер или нет! -->
+                  </div>
                 </div>
-                
               </div>
-              <h1 v-else>Данные загружаются</h1>              
-							<!-- {{hotelInfo}} -->              							
+              <h1 v-else>Данные загружаются</h1>
+							<!-- {{hotelInfo}} -->
+
             </div>
         </div>
         <!-- В попап передаем реактивную переменную inPopupSlides со слайдами, полученной из функции sliderClick-->
-        <Popup          
+        <Popup
           v-show="isPopupVisible"
         >
           <SwiperSlider
@@ -70,16 +79,16 @@
             :isNextArrowVisible="true"
           >
             <template #default>
-              <swiper-slide                                    
+              <swiper-slide
                 v-for="(slide) in inPopupSlides" :key="slide.photo">
                   <div>
                     <img :src="slide.photoImgUrl" alt="" />
                   </div>
               </swiper-slide>
-              <button 
+              <button
                 @click="isPopupVisible = false"
                 class="popup-close-btn">Закрыть
-              </button>                                                 
+              </button>
             </template>
           </SwiperSlider>
         </Popup>
@@ -91,7 +100,7 @@ import { BaseButton } from '@/components/ui';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Sidebar, Popup } from '@/components/widgets';
 import { SwiperSlider } from '@/components/widgets';
-import { defineProps, computed, onBeforeMount, onMounted, ref } from 'vue';
+import { defineProps, computed, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 
@@ -108,8 +117,8 @@ function sliderClick (sl) {
   isPopupVisible.value = true;
   inPopupSlides.value = sl.img;
 }
-onMounted(()=> {    
-    hotelsStore.fetchHotelById(id.value);
+onBeforeMount(async()=> {
+    await hotelsStore.fetchHotelById(id.value);
 })
 // const hotelsList = computed(()=> hotelsStore.getHotelsData);
 // const hotelInfo = computed(()=> hotelsList.value.find(hotel => hotel.id === id.value));
@@ -170,7 +179,7 @@ onMounted(()=> {
   border-radius: 3px;
   padding: 0 5px 0;
   position: relative;
-  
+
 }
 .numbers__content-info {
   margin-bottom: 20px !important;
@@ -201,5 +210,10 @@ onMounted(()=> {
 }
 .info-hotel-name {
   font-size: 18px;
+}
+.text-booking {
+  text-align: center;
+  font-size: 20px;
+  color: red;
 }
 </style>

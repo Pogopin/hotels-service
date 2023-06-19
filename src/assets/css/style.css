@@ -57,10 +57,12 @@ article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, s
 body {
   margin: 0;
   font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  text-align: left;
-  background-color: #fff; }
+  line-height: 1.5;  
+  font-family: "Poppins", Arial, sans-serif;
+  background: #f3f3f4;
+  font-size: 14px;  
+ 
+} 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem; }
@@ -217,20 +219,6 @@ h4, .h4 {
   flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px; }
-
-body {
-  font-family: "Poppins", Arial, sans-serif;
-  background: #fff;
-  font-size: 14px;
-  line-height: 1.8;
-  font-weight: 300;
-  color: #4d4d4d; }
-  body.menu-show {
-    overflow: hidden;
-    position: fixed;
-    height: 100%;
-    width: 100%; }
-
 a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;

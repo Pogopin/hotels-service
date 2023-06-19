@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import index from "../views/index.vue";
 import Hotels from "../views/hotel/index.vue";
 import HotelInfo from "../views/hotelInfo/index.vue";
+import HotelBooking from "../views/HotelBooking/index.vue";
 
 import { AppLayouts, loadLayoutMiddleware } from "./loadLayoutMiddleware";
 
@@ -28,6 +29,15 @@ const router = createRouter({
       path: "/hotels/:id",
       name: "info",
       component: HotelInfo,
+      meta: {
+        layout: AppLayouts.default,
+      },
+    },
+    {
+      path: "/hotels/:id/booking/:num",
+      name: "booking",
+      component: HotelBooking,
+      
       meta: {
         layout: AppLayouts.default,
       },

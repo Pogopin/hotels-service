@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="props.modifyStyle">
+  <button class="btn" :class="props.modifyStyle" :disabled="props.disabled">
     {{ props.text }}
   </button>
 </template>
@@ -10,6 +10,7 @@ import { defineProps } from "vue";
 const props = defineProps({
   text: String,
   modifyStyle: String,
+  disabled: Boolean
 });
 </script>
 <style scoped>
