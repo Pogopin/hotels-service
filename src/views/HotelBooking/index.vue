@@ -31,7 +31,6 @@
               </div>
 
             </div>
-
             <div class="content-service__item item">
               <div class="item__number-tarif tarif">
                 <p class="tarif__price">Cтоимость номера:</p>
@@ -41,22 +40,31 @@
                 <div> Российский рубль</div>
                 <div v-if="isNaN(differenceInDays)">{{numberInfo.price}}</div>
                 <div v-else>{{numberInfo.price.replace(/[^+\d]/g, '') * differenceInDays}} ₽</div>
-
               </div>
-
             </div>
 
           </div>
           <form class="form__booking">
             <div class="fields">
+              <!-- <div class="form-input">
+                <BaseInput
+                  type="email"
+                  class="form-control"
+                  placeholder="email"
+                  id="email"
+                  @update:value="(value) => emailField = value"
+                />
+                <div class="form-error" v-for="el in $v.emailField.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+              </div> -->
               <div class="form-input">
                 <BaseInput
                   type="email"
                   class="form-control"
                   placeholder="email"
                   id="email"
-
+                  @update:value="(value) => setData(value, 'email')"
                 />
+                <div class="form-error" v-for="el in v$.email.$silentErrors" :key="el.$uid">{{el.$message}}</div>
               </div>
               <div class="form-input">
                 <BaseInput
@@ -64,9 +72,13 @@
                   class="form-control"
                   placeholder="Имя"
                   id="name"
-
+                  @update:value="(value) => setData(value, 'name')"
                 />
+                <TransitionGroup>
+                  <div class="form-error" v-for="el in v$.name.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+                </TransitionGroup>
               </div>
+
               <div class="form-input">
                 <BaseInput
                   type="text"
@@ -78,12 +90,13 @@
               </div>
               <div class="form-input">
                 <BaseInput
-                  type="text"
+                  type="tel"
                   class="form-control"
-                  placeholder="Телефон для связи"
+                  placeholder="Телефон для связи: формат 79001234567"
                   id="phone"
-
+                  @update:value="(value) => setData(value, 'phone')"
                 />
+                <div class="form-error" v-for="el in v$.phone.$silentErrors" :key="el.$uid">{{el.$message}}</div>
               </div>
               <div class="form-input">
                 <BaseInput
@@ -112,6 +125,9 @@
         <!-- {{hotelInfo}} -->
         <!-- {{numberInfo}} -->
 
+        <!-- {{v$.email.$silentErrors}} -->
+        <!-- {{v$.name.$silentErrors}} -->
+        <!-- {{bookingParams}} -->
         </div>
     </div>
 </template>
@@ -192,12 +208,20 @@
   margin: 0 auto;
   margin-bottom: 30px;
   text-align: center;
+  position: relative;
+}
+.form-error {
+  position: absolute;
+  color: red;
 }
 </style>
 <script setup>
+import { useVuelidate } from '@vuelidate/core';
+import { helpers, minLength, email, maxLength, numeric } from '@vuelidate/validators';
+
 import { BaseInput, BaseButton} from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
-import { defineProps, computed, onBeforeMount, ref } from 'vue';
+import { defineProps, computed, onBeforeMount, ref, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 import { data } from "@/utils/database.js";
@@ -224,29 +248,49 @@ async function bookingNumber() {
   //новый массив numbers с обновленными данными
   const updateNumbers = hotelInfo.value.numbers;
   updateNumbers[numberIndex].booking = true;
-  updateNumbers[numberIndex].dateFrom = bookingParams.value.dateFrom;
-  updateNumbers[numberIndex].dateTo = bookingParams.value.dateTo;
+  updateNumbers[numberIndex].dateFrom = bookingParams.dateFrom;
+  updateNumbers[numberIndex].dateTo = bookingParams.dateTo;
 
-  await data.setNumberBookingDate(id.value, updateNumbers);
-  console.log(id.value)
+  // await data.setNumberBookingDate(id.value, updateNumbers);
+  // console.log(id.value)
+  v$.value.$touch();
+  if(v$.value.$error) console.log('Есть ошибки!!!')
+
 }
 
 function changeDate(nameSelector, searchProperty) {
   const idInput = nameSelector.target.id;
   dataIn(idInput, (date) => {
-    bookingParams.value[searchProperty] = date;
+    bookingParams[searchProperty] = date;
   });
 }
-const bookingParams = ref({
+const bookingParams = reactive({
   email: '',
   name: '',
   surname: '',
+  phone: null,
   dateFrom: '',
   dateTo: '',
 })
+const rules = computed(() => {
+      const localRules = {
+        email: {minLength: helpers.withMessage(`Неверный ввод email`, email)},
+        name: {minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3))},
+        phone: {
+          maxLength: helpers.withMessage(`Максимальная длинна: 8 символа`, maxLength(8)),
+          numeric: helpers.withMessage(`Только цифры`, numeric)
+        }
+      }
+      return localRules;
+    })
+const v$ = useVuelidate(rules, bookingParams);
+
+function setData(val, data) {
+  bookingParams[data] = val;
+}
 //расчет разницы дней из выбранных дат
-const date1 = computed(() => new Date(bookingParams.value.dateFrom));
-const date2 = computed(() => new Date(bookingParams.value.dateTo));
+const date1 = computed(() => new Date(bookingParams.dateFrom));
+const date2 = computed(() => new Date(bookingParams.dateTo));
 
 const timeDiff = computed(() => Math.abs(date2.value.getTime() - date1.value.getTime()));
 const differenceInDays = computed(() => Math.ceil(timeDiff.value / (1000 * 3600 * 24)));
