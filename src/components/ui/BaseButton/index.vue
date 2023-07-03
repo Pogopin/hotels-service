@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="props.modifyStyle" :disabled="props.disabled">
+  <button class="btn" :class="[props.modifyStyle, {'no-hover': props.disabled}]" :disabled="props.disabled" >
     {{ props.text }}
   </button>
 </template>
@@ -20,5 +20,8 @@ const props = defineProps({
 }
 .booking-button:hover {
   background-color: #0d3b8a;
+}
+.no-hover {
+  pointer-events: none;
 }
 </style>

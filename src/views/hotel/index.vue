@@ -7,7 +7,6 @@
           <div class="row">
             <HotelsList :hotelsList="hotels" />
           </div>
-          <!-- {{hotels}} -->
 
           <!-- <div class="row mt-5">
 		          <div class="col text-center">
@@ -41,5 +40,11 @@ onBeforeMount(async () => {
   console.log("beforeMounted");
   await hotelsStore.fetchHotels();
 });
-const hotels = computed(() => hotelsStore.getHotelsData);
+// const hotels = computed(() => hotelsStore.getHotelsData);
+const hotels = computed(() => {
+  if(hotelsStore.getFilteredHotels.length != 0) {
+    return hotelsStore.getFilteredHotels;
+  }
+  else return hotelsStore.getHotelsData;
+});
 </script>

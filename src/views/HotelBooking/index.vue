@@ -12,7 +12,6 @@
                   <p class="hotel-address">{{hotelInfo.addres}}</p>
 
                   <div>
-                    <!-- <p class="number-name">{{hotelInfo.numbers[0].name}}</p> -->
                     <p class="number-name">{{numberInfo.name}}</p>
                   </div>
                 </div>
@@ -46,16 +45,6 @@
           </div>
           <form class="form__booking">
             <div class="fields">
-              <!-- <div class="form-input">
-                <BaseInput
-                  type="email"
-                  class="form-control"
-                  placeholder="email"
-                  id="email"
-                  @update:value="(value) => emailField = value"
-                />
-                <div class="form-error" v-for="el in $v.emailField.$silentErrors" :key="el.$uid">{{el.$message}}</div>
-              </div> -->
               <div class="form-input">
                 <BaseInput
                   type="email"
@@ -85,8 +74,9 @@
                   class="form-control"
                   placeholder="Фамилия"
                   id="surname"
-
+                  @update:value="(value) => setData(value, 'surname')"
                 />
+                <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">{{el.$message}}</div>
               </div>
               <div class="form-input">
                 <BaseInput
@@ -117,17 +107,21 @@
                 />
               </div>
               <div class="form-input">
-                <BaseButton text="Забронировать" modifyStyle="btn-primary py-3 px-5" @click.prevent="bookingNumber" />
+                <BaseButton
+                  text="Забронировать"
+                  modifyStyle="btn-primary py-3 px-5"
+                  :disabled="btnBookingState"
+                  @click.prevent="bookingNumber"
+                />
               </div>
 
             </div>
           </form>
         <!-- {{hotelInfo}} -->
         <!-- {{numberInfo}} -->
-
         <!-- {{v$.email.$silentErrors}} -->
-        <!-- {{v$.name.$silentErrors}} -->
         <!-- {{bookingParams}} -->
+        <!-- {{v$.$invalid}}         -->
         </div>
     </div>
 </template>
@@ -217,7 +211,7 @@
 </style>
 <script setup>
 import { useVuelidate } from '@vuelidate/core';
-import { helpers, minLength, email, maxLength, numeric } from '@vuelidate/validators';
+import { helpers, minLength, email, maxLength, numeric, required } from '@vuelidate/validators';
 
 import { BaseInput, BaseButton} from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
@@ -243,6 +237,12 @@ const numberInfo = computed(() => { // это объект выбранного 
 onBeforeMount(async ()=> {
   await hotelsStore.fetchHotelById(id.value);
 })
+const btnBookingState = computed(()=> {
+  if(v$.value.$invalid) {
+    return true
+  }
+  else { return false }
+})
 async function bookingNumber() {
   const numberIndex = Number(number.value);
   //новый массив numbers с обновленными данными
@@ -250,12 +250,11 @@ async function bookingNumber() {
   updateNumbers[numberIndex].booking = true;
   updateNumbers[numberIndex].dateFrom = bookingParams.dateFrom;
   updateNumbers[numberIndex].dateTo = bookingParams.dateTo;
-
-  // await data.setNumberBookingDate(id.value, updateNumbers);
   // console.log(id.value)
   v$.value.$touch();
-  if(v$.value.$error) console.log('Есть ошибки!!!')
-
+  console.log('form Success!!!')
+  // btnBookingState.value = true;
+  // await data.setNumberBookingDate(id.value, updateNumbers);
 }
 
 function changeDate(nameSelector, searchProperty) {
@@ -274,8 +273,9 @@ const bookingParams = reactive({
 })
 const rules = computed(() => {
       const localRules = {
-        email: {minLength: helpers.withMessage(`Неверный ввод email`, email)},
+        email: {minLength: helpers.withMessage(`Неверный ввод email`, email), required: helpers.withMessage(`Поле обязательное`, required) },
         name: {minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3))},
+        surname: {required: helpers.withMessage(`Поле обязательное`, required)},
         phone: {
           maxLength: helpers.withMessage(`Максимальная длинна: 8 символа`, maxLength(8)),
           numeric: helpers.withMessage(`Только цифры`, numeric)
