@@ -1,9 +1,9 @@
 <template>
-  <input :type="props.type" :placeholder="props.placeholder" :id="props.id" :name="props.name" v-model="val" />
+  <input :type="props.type" :placeholder="props.placeholder" :id="props.id" :name="props.name" v-model="val"/>
 
 </template>
 <script setup>
-import { defineProps, defineEmits, computed } from "vue";
+import { defineProps, defineEmits, computed, ref } from "vue";
 
 const props = defineProps({
   id: String,
@@ -16,11 +16,13 @@ const props = defineProps({
     required: false
   },
   placeholder: String,
+  value: String
 });
 const emits = defineEmits(["update:value"]);
 const val = computed({
   get() {
-    return "";
+    // return "";
+    return props.value;
   },
   set(value) {
     emits("update:value", value);
