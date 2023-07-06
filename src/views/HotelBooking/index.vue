@@ -65,17 +65,79 @@
               {{ el.$message }}
             </div>
           </div>
-          <div class="form-input">
-            <BaseInput
-              type="text"
-              class="form-control"
-              placeholder="Имя"
-              id="name"
-              @update:value="(value) => setData(value, 'name')"
-            />
-            <TransitionGroup>
-              <div class="form-error" v-for="el in v$.name.$silentErrors" :key="el.$uid">
-                {{ el.$message }}
+          <form class="form__booking">
+            <div class="fields">
+              <div class="form-input">
+                <BaseInput
+                  type="email"
+                  class="form-control"
+                  placeholder="email"
+                  id="email"
+                  :value="bookingParams.email"
+                  @update:value="(value) => setData(value, 'email')"
+                />
+                <div class="form-error" v-for="el in v$.email.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  class="form-control"
+                  placeholder="Имя"
+                  id="name"
+                  @update:value="(value) => setData(value, 'name')"
+                />
+                <TransitionGroup>
+                  <div class="form-error" v-for="el in v$.name.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+                </TransitionGroup>
+              </div>
+
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  class="form-control"
+                  placeholder="Фамилия"
+                  id="surname"
+                  :value="bookingParams.surname"
+                  @update:value="(value) => setData(value, 'surname')"
+                />
+                <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="tel"
+                  class="form-control"
+                  placeholder="Телефон формат: 8 (9xx) xxx-xxxx"
+                  id="phone"
+                  :value="bookingParams.phone"
+                  @update:value="(value) => setData(value, 'phone')"
+                  v-phone="bookingParams.phone"
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  id="date_from"
+                  class="form-control"
+                  placeholder="Дата заезда"
+                  @focus="($event) => changeDate($event, 'dateFrom')"
+                />
+              </div>
+              <div class="form-input">
+                <BaseInput
+                  type="text"
+                  id="date_to"
+                  class="form-control"
+                  placeholder="Дата выезда"
+                  @focus="($event) => changeDate($event, 'dateTo')"
+                />
+              </div>
+              <div class="form-input">
+                <BaseButton
+                  text="Забронировать"
+                  modifyStyle="btn-primary py-3 px-5"
+                  :disabled="v$.$invalid"
+                  @click.prevent="bookingNumber"
+                />
               </div>
             </TransitionGroup>
           </div>
@@ -91,45 +153,13 @@
             <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">
               {{ el.$message }}
             </div>
-          </div>
-          <div class="form-input">
-            <BaseInput
-              type="tel"
-              class="form-control"
-              placeholder="Телефон для связи: формат 79001234567"
-              id="phone"
-              @update:value="(value) => setData(value, 'phone')"
-            />
-            <div class="form-error" v-for="el in v$.phone.$silentErrors" :key="el.$uid">
-              {{ el.$message }}
-            </div>
-          </div>
-          <div class="form-input">
-            <BaseInput
-              type="text"
-              id="date_from"
-              class="form-control"
-              placeholder="Дата заезда"
-              @focus="($event) => changeDate($event, 'dateFrom')"
-            />
-          </div>
-          <div class="form-input">
-            <BaseInput
-              type="text"
-              id="date_to"
-              class="form-control"
-              placeholder="Дата выезда"
-              @focus="($event) => changeDate($event, 'dateTo')"
-            />
-          </div>
-          <div class="form-input">
-            <BaseButton
-              text="Забронировать"
-              modifyStyle="btn-primary py-3 px-5"
-              :disabled="btnBookingState"
-              @click.prevent="bookingNumber"
-            />
-          </div>
+          </form>
+        <!-- {{hotelInfo}} -->
+        <!-- {{numberInfo}} -->
+        <!-- {{v$.email.$silentErrors}} -->
+        <!-- {{bookingParams}} -->
+        <!-- {{v$.$invalid}}         -->
+
         </div>
       </form>
       <!-- {{hotelInfo}} -->
@@ -292,16 +322,9 @@ const numberInfo = computed(() => {
   return null;
 });
 
-onBeforeMount(async () => {
-  await hotelsStore.fetchHotelById(ids.value);
-});
-const btnBookingState = computed(() => {
-  if (v$.value.$invalid) {
-    return true;
-  } else {
-    return false;
-  }
-});
+onBeforeMount(async ()=> {
+  await hotelsStore.fetchHotelById(id.value);
+})
 async function bookingNumber() {
   const numberIndex = Number(number.value);
   //новый массив numbers с обновленными данными
@@ -311,8 +334,11 @@ async function bookingNumber() {
   updateNumbers[numberIndex].dateTo = bookingParams.dateTo;
   // console.log(id.value)
   v$.value.$touch();
-  console.log("form Success!!!");
-  // btnBookingState.value = true;
+  bookingParams.email = '';
+  bookingParams.surname = '';
+  bookingParams.phone = '';
+    console.log('form Success!!!')
+
   // await data.setNumberBookingDate(id.value, updateNumbers);
 }
 
@@ -331,20 +357,17 @@ const bookingParams = reactive({
   dateTo: "",
 });
 const rules = computed(() => {
-  const localRules = {
-    email: {
-      minLength: helpers.withMessage(`Неверный ввод email`, email),
-      required: helpers.withMessage(`Поле обязательное`, required),
-    },
-    name: { minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3)) },
-    surname: { required: helpers.withMessage(`Поле обязательное`, required) },
-    phone: {
-      maxLength: helpers.withMessage(`Максимальная длинна: 8 символа`, maxLength(8)),
-      numeric: helpers.withMessage(`Только цифры`, numeric),
-    },
-  };
-  return localRules;
-});
+      const localRules = {
+        email: {minLength: helpers.withMessage(`Неверный ввод email`, email), required: helpers.withMessage(`Поле обязательное`, required) },
+        name: {minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3))},
+        surname: {required: helpers.withMessage(`Поле обязательное`, required)},
+        // phone: {
+        //   maxLength: helpers.withMessage(`Максимальная длинна: 11 символов`, maxLength(16)),
+        //   numeric: helpers.withMessage(`Только цифры`, numeric)
+        // }
+      }
+      return localRules;
+    })
 const v$ = useVuelidate(rules, bookingParams);
 
 function setData(val, data) {
