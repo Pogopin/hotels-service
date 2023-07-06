@@ -8,13 +8,13 @@ export const useHotelsStore = defineStore(id, {
     return {
       hotelsList: [],
       hotelInfo: {},
-      filteredHotels: []
+      filteredHotels: [],
     };
   },
   getters: {
     getHotelsData: (state) => state.hotelsList,
     getHotelInfo: (state) => state.hotelInfo,
-    getFilteredHotels: (state) => state.filteredHotels
+    getFilteredHotels: (state) => state.filteredHotels,
   },
   actions: {
     async fetchHotels() {
@@ -58,6 +58,9 @@ export const useHotelsStore = defineStore(id, {
     },
     addFilteredHotelinState(hotels) {
       this.filteredHotels = hotels;
-    }
+    },
+    async filterHotels(sortValues) {
+      this.filteredHotels = this.hotelsList.filter((hotel) => hotel.country === sortValues.country);
+    },
   },
 });

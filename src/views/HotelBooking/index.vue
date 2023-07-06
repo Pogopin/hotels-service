@@ -52,19 +52,6 @@
         </div>
       </div>
       <form class="form__booking">
-        <div class="fields">
-          <div class="form-input">
-            <BaseInput
-              type="email"
-              class="form-control"
-              placeholder="email"
-              id="email"
-              @update:value="(value) => setData(value, 'email')"
-            />
-            <div class="form-error" v-for="el in v$.email.$silentErrors" :key="el.$uid">
-              {{ el.$message }}
-            </div>
-          </div>
           <form class="form__booking">
             <div class="fields">
               <div class="form-input">
@@ -76,7 +63,9 @@
                   :value="bookingParams.email"
                   @update:value="(value) => setData(value, 'email')"
                 />
-                <div class="form-error" v-for="el in v$.email.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+                <div class="form-error" v-for="el in v$.email.$silentErrors" :key="el.$uid">
+                  {{ el.$message }}
+                </div>
               </div>
               <div class="form-input">
                 <BaseInput
@@ -87,7 +76,9 @@
                   @update:value="(value) => setData(value, 'name')"
                 />
                 <TransitionGroup>
-                  <div class="form-error" v-for="el in v$.name.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+                  <div class="form-error" v-for="el in v$.name.$silentErrors" :key="el.$uid">
+                    {{ el.$message }}
+                  </div>
                 </TransitionGroup>
               </div>
 
@@ -100,7 +91,9 @@
                   :value="bookingParams.surname"
                   @update:value="(value) => setData(value, 'surname')"
                 />
-                <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">{{el.$message}}</div>
+                <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">
+                  {{ el.$message }}
+                </div>
               </div>
               <div class="form-input">
                 <BaseInput
@@ -139,34 +132,14 @@
                   @click.prevent="bookingNumber"
                 />
               </div>
-            </TransitionGroup>
-          </div>
-
-          <div class="form-input">
-            <BaseInput
-              type="text"
-              class="form-control"
-              placeholder="Фамилия"
-              id="surname"
-              @update:value="(value) => setData(value, 'surname')"
-            />
-            <div class="form-error" v-for="el in v$.surname.$silentErrors" :key="el.$uid">
-              {{ el.$message }}
             </div>
           </form>
-        <!-- {{hotelInfo}} -->
-        <!-- {{numberInfo}} -->
-        <!-- {{v$.email.$silentErrors}} -->
-        <!-- {{bookingParams}} -->
-        <!-- {{v$.$invalid}}         -->
-
-        </div>
+          <!-- {{hotelInfo}} -->
+          <!-- {{numberInfo}} -->
+          <!-- {{v$.email.$silentErrors}} -->
+          <!-- {{bookingParams}} -->
+          <!-- {{v$.$invalid}}         -->
       </form>
-      <!-- {{hotelInfo}} -->
-      <!-- {{numberInfo}} -->
-      <!-- {{v$.email.$silentErrors}} -->
-      <!-- {{bookingParams}} -->
-      <!-- {{v$.$invalid}}         -->
     </div>
   </div>
 </template>
@@ -290,7 +263,7 @@
 </style>
 <script setup>
 import { useVuelidate } from "@vuelidate/core";
-import { helpers, minLength, email, maxLength, numeric, required } from "@vuelidate/validators";
+import { helpers, minLength, email, required } from "@vuelidate/validators";
 
 import { BaseInput, BaseButton } from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
@@ -301,7 +274,6 @@ import { useHotelsStore } from "../../stores/hotelsStore.js";
 const hotelsStore = useHotelsStore();
 const hotelInfo = computed(() => hotelsStore.getHotelInfo);
 const route = useRoute();
-const ids = computed(() => route.params.id);
 const number = computed(() => route.params.num);
 
 // заменить route на значения из пропсов
@@ -322,9 +294,9 @@ const numberInfo = computed(() => {
   return null;
 });
 
-onBeforeMount(async ()=> {
-  await hotelsStore.fetchHotelById(id.value);
-})
+onBeforeMount(async () => {
+  await hotelsStore.fetchHotelById(props.id);
+});
 async function bookingNumber() {
   const numberIndex = Number(number.value);
   //новый массив numbers с обновленными данными
@@ -334,10 +306,10 @@ async function bookingNumber() {
   updateNumbers[numberIndex].dateTo = bookingParams.dateTo;
   // console.log(id.value)
   v$.value.$touch();
-  bookingParams.email = '';
-  bookingParams.surname = '';
-  bookingParams.phone = '';
-    console.log('form Success!!!')
+  bookingParams.email = "";
+  bookingParams.surname = "";
+  bookingParams.phone = "";
+  console.log("form Success!!!");
 
   // await data.setNumberBookingDate(id.value, updateNumbers);
 }
@@ -357,17 +329,20 @@ const bookingParams = reactive({
   dateTo: "",
 });
 const rules = computed(() => {
-      const localRules = {
-        email: {minLength: helpers.withMessage(`Неверный ввод email`, email), required: helpers.withMessage(`Поле обязательное`, required) },
-        name: {minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3))},
-        surname: {required: helpers.withMessage(`Поле обязательное`, required)},
-        // phone: {
-        //   maxLength: helpers.withMessage(`Максимальная длинна: 11 символов`, maxLength(16)),
-        //   numeric: helpers.withMessage(`Только цифры`, numeric)
-        // }
-      }
-      return localRules;
-    })
+  const localRules = {
+    email: {
+      minLength: helpers.withMessage(`Неверный ввод email`, email),
+      required: helpers.withMessage(`Поле обязательное`, required),
+    },
+    name: { minLength: helpers.withMessage(`Минимальная длинна: 3 символа`, minLength(3)) },
+    surname: { required: helpers.withMessage(`Поле обязательное`, required) },
+    // phone: {
+    //   maxLength: helpers.withMessage(`Максимальная длинна: 11 символов`, maxLength(16)),
+    //   numeric: helpers.withMessage(`Только цифры`, numeric)
+    // }
+  };
+  return localRules;
+});
 const v$ = useVuelidate(rules, bookingParams);
 
 function setData(val, data) {
