@@ -56,11 +56,35 @@ export const useHotelsStore = defineStore(id, {
         })
       );
     },
-    addFilteredHotelinState(hotels) {
-      this.filteredHotels = hotels;
-    },
     async filterHotels(sortValues) {
-      this.filteredHotels = this.hotelsList.filter((hotel) => hotel.country === sortValues.country);
+      let tempHotels = [];
+
+      if(sortValues.country) {
+        this.filteredHotels = this.hotelsList.filter((hotel) => hotel.country === sortValues.country);
+      };
+      if(sortValues.city) {
+        this.filteredHotels = this.hotelsList.filter((hotel) => hotel.city === sortValues.city);
+        if(this.filteredHotels.length === 0) alert('В данном городе нет отелей!');
+      }
+
+      for(let el in sortValues.starRating) {//сортировка по звездам (stars)
+        if(sortValues.starRating[el].checked === true) {//проверка какие звезды выбраны
+          console.log(sortValues.starRating[el].num);
+          if(sortValues.country) {//если страна заполнена сортируем по уже отфильтрованному массиву по стране учитывая звезды
+            this.filteredHotels.forEach((hotel)=> {
+              if(hotel.stars == sortValues.starRating[el].num) tempHotels.push(hotel);
+            })
+          }
+          else//если страна не заполнена фильтруем все отели по звездам
+          this.hotelsList.forEach((hotel)=> {
+            if(hotel.stars == sortValues.starRating[el].num) tempHotels.push(hotel);
+          })
+        }
+      }
+      if(tempHotels.length != 0) this.filteredHotels = tempHotels;
+      if(!sortValues.country && !sortValues.city && !tempHotels.length) alert('ничего не выбрано!');
+
+
     },
   },
 });

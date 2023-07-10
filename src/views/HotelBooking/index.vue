@@ -5,10 +5,8 @@
         <div v-if="hotelInfo && numberInfo" class="content-service__item item">
           <div class="item__info-wrap">
             <div class="item__info-img">
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/vue-hotel-service.appspot.com/o/hotels%2Fcoral-hills-resort%2Fcoral-preview.jpeg?alt=media&token=6b61fb28-e93b-4098-a953-564706628a2b"
-                alt=""
-              />
+              <img :src="hotelInfo.fullPath" alt="image"
+            />
             </div>
             <div class="item__info-number number">
               <h5 class="hotel-name">{{ hotelInfo.name }}</h5>
@@ -268,27 +266,20 @@ import { helpers, minLength, email, required } from "@vuelidate/validators";
 import { BaseInput, BaseButton } from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
 import { computed, onBeforeMount, reactive } from "vue";
-import { useRoute } from "vue-router";
 import { useHotelsStore } from "../../stores/hotelsStore.js";
 
 const hotelsStore = useHotelsStore();
 const hotelInfo = computed(() => hotelsStore.getHotelInfo);
-const route = useRoute();
-const number = computed(() => route.params.num);
 
-// заменить route на значения из пропсов
 const props = defineProps({
   id: String,
   num: String,
 });
-
-console.log("props :", props);
-console.log("params :", route.params);
-
+// console.log("props :", props);
 const numberInfo = computed(() => {
   // это объект выбранного номера для отображения на странице, полученный из hotelInfo.numbers[]
   if (Object.keys(hotelInfo.value).length !== 0) {
-    const numberIndex = Number(number.value);
+    const numberIndex = props.num;
     return hotelInfo.value.numbers[numberIndex];
   }
   return null;
@@ -310,7 +301,6 @@ async function bookingNumber() {
   bookingParams.surname = "";
   bookingParams.phone = "";
   console.log("form Success!!!");
-
   // await data.setNumberBookingDate(id.value, updateNumbers);
 }
 
