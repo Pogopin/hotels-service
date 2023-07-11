@@ -83,17 +83,22 @@
       </form>
     </div>
     <!-- {{searchParams}} -->
+
   </div>
 </template>
 <script setup>
+import { useHotelsStore } from "@/stores/hotelsStore.js";
 import { dataIn } from "@/assets/js/picker.js";
 import { BaseInput, BaseButton, BaseSelect, BaseCheckBox, RangeSlider } from "@/components/ui";
 import { ref } from "vue";
 import { checkBoxConf } from "@/config/checkBoxConfig.js";
 import { towns } from "@/config/city.js";
 
+const hotelsStore = useHotelsStore();
+
 function search() {
-  console.log("Поиск");
+  // функция поиска отелей по выбранным параметрам - searchParams
+  hotelsStore.filterHotels(searchParams.value)
 }
 const selectCityOptions = ref([]);
 // const choseCity = ref('Выберите город')

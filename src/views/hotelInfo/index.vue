@@ -58,7 +58,9 @@
                     </div>
                     <div class="text-booking"
                       v-if="hotelInfo.numbers[index].booking"
-                    >Номер уже забронирован</div>
+                    >
+                      Номер уже забронирован
+                    </div>
 
                     <!-- {{hotelInfo.numbers[index].booking}} -->
                     <!-- забронирован номер или нет! -->

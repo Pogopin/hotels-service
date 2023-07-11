@@ -28,6 +28,7 @@ const router = createRouter({
     {
       path: "/hotels/:id",
       name: "info",
+      props: true,
       component: HotelInfo,
       meta: {
         layout: AppLayouts.default,
@@ -37,7 +38,7 @@ const router = createRouter({
       path: "/hotels/:id/booking/:num",
       name: "booking",
       component: HotelBooking,
-      
+      props: true,
       meta: {
         layout: AppLayouts.default,
       },
