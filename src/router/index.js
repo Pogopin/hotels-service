@@ -3,6 +3,7 @@ import index from "../views/index.vue";
 import Hotels from "../views/hotel/index.vue";
 import HotelInfo from "../views/hotelInfo/index.vue";
 import HotelBooking from "../views/HotelBooking/index.vue";
+import AdminPanel from "../views/Admin/index.vue";
 
 import { AppLayouts, loadLayoutMiddleware } from "./loadLayoutMiddleware";
 
@@ -41,6 +42,14 @@ const router = createRouter({
       props: true,
       meta: {
         layout: AppLayouts.default,
+      },
+    },
+    {
+      path: "/administrator",
+      name: "admin",
+      component: AdminPanel,
+      meta: {
+        layout: AppLayouts.login,
       },
     },
   ],

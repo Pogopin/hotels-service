@@ -267,6 +267,7 @@ import { BaseInput, BaseButton } from "@/components/ui";
 import { dataIn } from "@/assets/js/picker.js";
 import { computed, onBeforeMount, reactive } from "vue";
 import { useHotelsStore } from "../../stores/hotelsStore.js";
+import { data } from "@/utils/database.js";
 
 const hotelsStore = useHotelsStore();
 const hotelInfo = computed(() => hotelsStore.getHotelInfo);
@@ -289,19 +290,19 @@ onBeforeMount(async () => {
   await hotelsStore.fetchHotelById(props.id);
 });
 async function bookingNumber() {
-  const numberIndex = Number(number.value);
+  const numberIndex = Number(props.num);
   //новый массив numbers с обновленными данными
   const updateNumbers = hotelInfo.value.numbers;
   updateNumbers[numberIndex].booking = true;
   updateNumbers[numberIndex].dateFrom = bookingParams.dateFrom;
   updateNumbers[numberIndex].dateTo = bookingParams.dateTo;
-  // console.log(id.value)
+
   v$.value.$touch();
   bookingParams.email = "";
   bookingParams.surname = "";
   bookingParams.phone = "";
   console.log("form Success!!!");
-  // await data.setNumberBookingDate(id.value, updateNumbers);
+  // await data.setNumberBookingDate(props.id, updateNumbers);
 }
 
 function changeDate(nameSelector, searchProperty) {
