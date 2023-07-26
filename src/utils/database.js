@@ -5,6 +5,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import { firebaseConfig } from "../firebase.js";
 import { useHotelsStore } from "@/stores/hotelsStore.js";
+import axios from 'axios';
 
 class DatabaseService {
   constructor() {
@@ -56,6 +57,90 @@ class DatabaseService {
       console.log('Массив numbers успешно обновлен.');
     } catch (error) {
       console.error('Ошибка при обновлении массива numbers:', error);
+    }
+  }
+  async sign(payload) {    //регистрация пользователя(нет в проекте)
+    const apiKey = 'AIzaSyDKgeuOkCBDoSsZ_NiatpoPpgTU7tt5vCI';
+    try {        
+      // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
+      let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`, {
+        ...payload,
+        returnSecureToken: true
+      });
+      console.log(response.data);
+      
+      const user = {
+        token: response.data.idToken,
+        email: response.data.email,
+        userId: response.data.localId,
+        refreshToken: response.data.refreshToken,
+        expiresIn: response.data.expiresIn
+      }
+      console.log(user)
+      // const hotelsStore = useHotelsStore();
+      // hotelsStore.addUserInfoinState(user);
+    }
+    catch(err) {      
+      console.log(err.response)
+      switch (err.response.data.error.message) {
+        case 'INVALID_EMAIL':
+          alert('invalid email');          
+          break;
+        case 'OPERATION_NOT_ALLOWED':
+          alert('operation not allowed');          
+          break;
+        default:
+          alert('error');          
+          break;
+      }
+    }
+
+  }
+  async signIn(payload, type) {    //вход пользователя
+    const apiKey = 'AIzaSyDKgeuOkCBDoSsZ_NiatpoPpgTU7tt5vCI';
+    const hotelsStore = useHotelsStore();
+    try {        
+      // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
+      let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
+        ...payload,
+        returnSecureToken: true
+      });
+      console.log(response.data);
+      
+      const user = {
+        token: response.data.idToken,
+        email: response.data.email,
+        userId: response.data.localId,
+        refreshToken: response.data.refreshToken,
+        expiresIn: response.data.expiresIn
+      }
+      // console.log(user)      
+      // hotelsStore.addUserInfoinState(user);
+      return true
+      
+    }
+    catch(err) {      
+      console.log(err.response)
+      let errorM = '';
+      switch (err.response.data.error.message) {
+        case 'INVALID_EMAIL':
+          alert('Неверный Email');     
+          errorM = 'Неверный email';
+          hotelsStore.addError(errorM);   
+          break;
+        case 'EMAIL_NOT_FOUND':
+          errorM = 'Такой Email не зарегистрирован';
+          hotelsStore.addError(errorM); 
+          alert('Такой Email не зарегистрирован');          
+          break;
+        case 'MISSING_PASSWORD':
+          alert('Пароль не введен');
+          break;
+        default:
+          alert('error');          
+          break;
+      }
+      return false
     }
 
   }
