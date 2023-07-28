@@ -11,13 +11,11 @@
     </div>
     <ul class="hotels__list" v-if="bookingHotels">
       <li class="hotels__list-item hotel"
-        v-for="el in bookingHotels" :key="el.name"
+        v-for="(el, index) in bookingHotels" :key="el.name"
       >Отель:  {{el.name}}
         <p class="hotel-number"><span>Номер: {{el.number}} : Заезд: {{el.dateFrom}} : Выезд: {{}}</span>
-          <button @click.prevent="unbook" class="unbook-btn">Разбронировать</button>
+          <button @click.prevent="unbook(el.id, index)" class="unbook-btn">Разбронировать</button>
         </p>
-
-
       </li>
     </ul>
   </div>
@@ -27,6 +25,7 @@
 import { BaseButton } from "@/components/ui";
 import { computed, onBeforeMount, ref } from 'vue';
 import { useHotelsStore } from "../../stores/hotelsStore.js";
+import { data } from "@/utils/database.js";
 
 const hotelsStore = useHotelsStore();
 const hotels = computed(()=> {
@@ -49,12 +48,11 @@ function searchHotels() {
     });
   })
 }
-function unbook() {
-  console.log('unbook')
-  console.log(newUpdateArrayHotels)
+async function unbook(idValue, indexValue) {
+  console.log('unbook');
+  console.log(newUpdateArrayHotels.value[indexValue].numbers);
+  // await data.setNumberBookingDate(idValue, newUpdateArrayHotels.value[indexValue].numbers);
 }
-
-
 onBeforeMount(async ()=> {
   console.log("beforeMounted");
   await hotelsStore.fetchHotels();
