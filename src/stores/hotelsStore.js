@@ -1,14 +1,17 @@
 import { defineStore } from "pinia";
 import { data } from "@/utils/database.js";
+// import axios from 'axios';
 
 const id = "hotels-store";
 
-export const useHotelsStore = defineStore(id, {
+export const useHotelsStore = defineStore(id, {  
   state: () => {
     return {
       hotelsList: [],
       hotelInfo: {},
       filteredHotels: [],
+      userInfo: {},
+      error: false
     };
   },
   getters: {
@@ -83,8 +86,14 @@ export const useHotelsStore = defineStore(id, {
       }
       if(tempHotels.length != 0) this.filteredHotels = tempHotels;
       if(!sortValues.country && !sortValues.city && !tempHotels.length) alert('ничего не выбрано!');
-
-
     },
+    async addUserInfoinState (obj) {
+      console.log(obj)
+      this.userInfo = obj
+    },
+    async addError(err) {
+      this.error = err;
+      console.log(err)      
+    }
   },
 });

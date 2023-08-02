@@ -4,6 +4,7 @@ import Hotels from "../views/hotel/index.vue";
 import HotelInfo from "../views/hotelInfo/index.vue";
 import HotelBooking from "../views/HotelBooking/index.vue";
 import AdminPanel from "../views/Admin/index.vue";
+import BookingFalse from '../views/bookingFalse/index.vue';
 
 import { AppLayouts, loadLayoutMiddleware } from "./loadLayoutMiddleware";
 
@@ -48,6 +49,14 @@ const router = createRouter({
       path: "/administrator",
       name: "admin",
       component: AdminPanel,
+      meta: {
+        layout: AppLayouts.login,
+      },
+    },
+    {
+      path: "/bookingFalse",
+      name: "bookingNo",
+      component: BookingFalse,
       meta: {
         layout: AppLayouts.login,
       },
