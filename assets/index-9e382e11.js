@@ -1,1 +1,0 @@
-import{o as t,c as s,e as o,f as n,u as c,H as l,F as u}from"./index-fac0fa27.js";const _={__name:"index",props:{hotelsList:Object},setup(a){const r=a;return(p,i)=>(t(!0),s(u,null,o(r.hotelsList,e=>(t(),n(c(l),{key:e.id,hotelData:e},null,8,["hotelData"]))),128))}};export{_ as default};
