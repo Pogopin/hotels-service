@@ -1,10 +1,10 @@
-<template>    
-    <swiper class="swiper-slider" 
+<template>
+    <swiper class="swiper-slider"
         :modules="modules"
         :loop="true"
         :slides-per-view="1"
         :autoplay="{
-            delay: 3000 
+            delay: 3000
         }"
         :navigation="{
             prevEl: '.swiper-button-prev',
@@ -30,9 +30,9 @@
         >
             <i class="fa fa-arrow-right arrow-size" aria-hidden="true"></i>
         </div>
-        
+
     </swiper>
-    
+
 </template>
 <script setup>
 import { onMounted, defineProps } from 'vue';
@@ -48,7 +48,8 @@ const props = defineProps({
     isNextArrowVisible: Boolean
 })
 function getImageUrl (name) {
-    return new URL('../../../assets/images/' + name, import.meta.url).href;
+    return new URL('@/assets/images/' + name, import.meta.url).href;
+    // return new URL('../../../assets/images/' + name, import.meta.url).href;
 }
 function activeSlide(event) {
     // console.log(event.activeIndex)
@@ -64,7 +65,7 @@ function activeSlide(event) {
 .swiper-slider {
     margin-top: 50px;
     cursor: pointer;
-    
+
 }
 .swiper-button-prev,.swiper-button-next {
     transform: translateY(-50%);
@@ -74,10 +75,10 @@ function activeSlide(event) {
 }
 
 
-.swiper-button-prev {    
+.swiper-button-prev {
     left: 20px;
 }
-.swiper-button-next {    
+.swiper-button-next {
     right: 20px;
 }
 </style>
