@@ -1,1 +1,0 @@
-import{b as s,o,c as a,t as n,W as d}from"./index-32c98b2e.js";const _=["disabled"],i={__name:"index",props:{text:String,modifyStyle:String,disabled:Boolean},setup(t){const e=t;return(l,c)=>(o(),a("button",{class:d(["btn",[e.modifyStyle,{"no-hover":e.disabled}]]),disabled:e.disabled},n(e.text),11,_))}},p=s(i,[["__scopeId","data-v-e8674d09"]]);export{p as default};
