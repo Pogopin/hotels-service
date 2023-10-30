@@ -48,8 +48,8 @@ const props = defineProps({
     isNextArrowVisible: Boolean
 })
 function getImageUrl (name) {
-    return new URL('../images/' + name, import.meta.url).href;
     // return new URL('../../../assets/images/' + name, import.meta.url).href;
+    return new URL('./images/' + name, import.meta.url).href;
 }
 function activeSlide(event) {
     // console.log(event.activeIndex)

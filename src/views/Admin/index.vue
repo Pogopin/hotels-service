@@ -1,9 +1,13 @@
 <template>
   <section class="login">
-    <div v-if="hotelsStore.$state.error">
-      <h1>ошибка</h1>
-    </div>
     <div class="container">
+      <div class="login__admin-btn">
+        <button
+          @click="router.push('/hotels')"
+          class="login__admin-home-btn"> -- Вернуться на страницу отелей
+        </button>
+      </div>
+      <p>Данные для входа в админку: email: test@mail.ru  password: 1234567</p>
       <h3>Введите логин и пароль администратора</h3>
       <form class="form__login">
         <div class="form-group">
@@ -28,16 +32,28 @@
           <BaseButton
             text="Войти"
             modifyStyle="btn-primary py-3 px-5"
-            @click.prevent="signUp"            
+            @click.prevent="signUp"
           />
         </div>
-        
+
       </form>
     </div>
   </section>
 
 </template>
 <style scoped>
+.login__admin-btn{
+  position: absolute;
+  top: 30px;
+}
+.login__admin-home-btn {
+  display: inline-block;
+  cursor: pointer;
+  background-color: rgb(250, 198, 198);
+}
+.login__admin-home-btn:hover {
+  background-color: transparent;
+}
 .login{
   height: 100vh;
   display: flex;
@@ -64,9 +80,9 @@ const logininp = ref('');
 const pass = ref('');
 
 async function signUp(){
-  console.log('sign');  
+  console.log('sign');
   const sign = await data.signIn({email: logininp.value, password: pass.value});
-  if(sign) { router.push('/bookingFalse'); }  
+  if(sign) { router.push('/bookingFalse'); }
 }
 
 </script>

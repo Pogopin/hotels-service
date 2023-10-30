@@ -132,11 +132,6 @@
               </div>
             </div>
           </form>
-          <!-- {{hotelInfo}} -->
-          <!-- {{numberInfo}} -->
-          <!-- {{v$.email.$silentErrors}} -->
-          <!-- {{bookingParams}} -->
-          <!-- {{v$.$invalid}}         -->
       </form>
     </div>
   </div>
@@ -268,7 +263,9 @@ import { dataIn } from "@/assets/js/picker.js";
 import { computed, onBeforeMount, reactive } from "vue";
 import { useHotelsStore } from "../../stores/hotelsStore.js";
 import { data } from "@/utils/database.js";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const hotelsStore = useHotelsStore();
 const hotelInfo = computed(() => hotelsStore.getHotelInfo);
 
@@ -302,7 +299,9 @@ async function bookingNumber() {
   bookingParams.surname = "";
   bookingParams.phone = "";
   console.log("form Success!!!");
-  // await data.setNumberBookingDate(props.id, updateNumbers);
+  await data.setNumberBookingDate(props.id, updateNumbers); //Бронь
+  alert('Номер успешно забронирован');
+  router.push({ name: 'info', params: {id: props.id}});
 }
 
 function changeDate(nameSelector, searchProperty) {
@@ -335,7 +334,6 @@ const rules = computed(() => {
   return localRules;
 });
 const v$ = useVuelidate(rules, bookingParams);
-
 function setData(val, data) {
   bookingParams[data] = val;
 }

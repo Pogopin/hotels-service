@@ -2,10 +2,11 @@
   <div class="admin__header"></div>
   <div class="container">
     <div class="search-hotels">
+      <h1>Данный функционал еще в разработке, можно только разбронировать все сразу</h1>
       <BaseButton
         class="adm-btn"
         text="Начать поиск забронированных отелей"
-        modifyStyle="btn-primary py-3 px-5"
+        modifyStyle="btn-primary"
         @click.prevent="searchHotels"
       />
     </div>
@@ -19,7 +20,6 @@
       </li>
     </ul>
   </div>
-<!-- {{bookingHotels}} -->
 </template>
 <script setup>
 import { BaseButton } from "@/components/ui";
@@ -33,8 +33,8 @@ const hotels = computed(()=> {
 })
 const bookingHotels = ref([]);
 const newUpdateArrayHotels = ref([]);//обновленный массив отелей, у которых разбронировали номера
-function searchHotels() {
 
+function searchHotels() {
   hotels.value.forEach((hotel) => {
     hotel.numbers.forEach(el => {
       if(el.booking) {
@@ -49,9 +49,10 @@ function searchHotels() {
   })
 }
 async function unbook(idValue, indexValue) {
-  console.log('unbook');
-  console.log(newUpdateArrayHotels.value[indexValue].numbers);
-  // await data.setNumberBookingDate(idValue, newUpdateArrayHotels.value[indexValue].numbers);
+  // console.log('unbook');
+  // console.log(newUpdateArrayHotels.value[indexValue].numbers);
+  await data.setNumberBookingDate(idValue, newUpdateArrayHotels.value[indexValue].numbers); //разбронировать
+  alert('Номер успешно разбронирован');
 }
 onBeforeMount(async ()=> {
   console.log("beforeMounted");

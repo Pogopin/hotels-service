@@ -6,6 +6,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { firebaseConfig } from "../firebase.js";
 import { useHotelsStore } from "@/stores/hotelsStore.js";
 import axios from 'axios';
+import router from "../router/index.js";
 
 class DatabaseService {
   constructor() {
@@ -61,14 +62,14 @@ class DatabaseService {
   }
   async sign(payload) {    //регистрация пользователя(нет в проекте)
     const apiKey = 'AIzaSyDKgeuOkCBDoSsZ_NiatpoPpgTU7tt5vCI';
-    try {        
+    try {
       // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
       let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`, {
         ...payload,
         returnSecureToken: true
       });
       console.log(response.data);
-      
+
       const user = {
         token: response.data.idToken,
         email: response.data.email,
@@ -80,17 +81,17 @@ class DatabaseService {
       // const hotelsStore = useHotelsStore();
       // hotelsStore.addUserInfoinState(user);
     }
-    catch(err) {      
+    catch(err) {
       console.log(err.response)
       switch (err.response.data.error.message) {
         case 'INVALID_EMAIL':
-          alert('invalid email');          
+          alert('invalid email');
           break;
         case 'OPERATION_NOT_ALLOWED':
-          alert('operation not allowed');          
+          alert('operation not allowed');
           break;
         default:
-          alert('error');          
+          alert('error');
           break;
       }
     }
@@ -99,14 +100,12 @@ class DatabaseService {
   async signIn(payload, type) {    //вход пользователя
     const apiKey = 'AIzaSyDKgeuOkCBDoSsZ_NiatpoPpgTU7tt5vCI';
     const hotelsStore = useHotelsStore();
-    try {        
+    try {
       // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
       let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
         ...payload,
         returnSecureToken: true
       });
-      console.log(response.data);
-      
       const user = {
         token: response.data.idToken,
         email: response.data.email,
@@ -114,37 +113,34 @@ class DatabaseService {
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn
       }
-      // console.log(user)      
+      // console.log(user)
       // hotelsStore.addUserInfoinState(user);
       return true
-      
     }
-    catch(err) {      
+    catch(err) {
       console.log(err.response)
       let errorM = '';
       switch (err.response.data.error.message) {
         case 'INVALID_EMAIL':
-          alert('Неверный Email');     
+          alert('Неверный Email');
           errorM = 'Неверный email';
-          hotelsStore.addError(errorM);   
+          hotelsStore.addError(errorM);
           break;
         case 'EMAIL_NOT_FOUND':
           errorM = 'Такой Email не зарегистрирован';
-          hotelsStore.addError(errorM); 
-          alert('Такой Email не зарегистрирован');          
+          hotelsStore.addError(errorM);
+          alert('Такой Email не зарегистрирован');
           break;
         case 'MISSING_PASSWORD':
           alert('Пароль не введен');
           break;
         default:
-          alert('error');          
+          alert('error');
           break;
       }
       return false
     }
-
   }
 }
-
 const data = new DatabaseService();
 export { data };

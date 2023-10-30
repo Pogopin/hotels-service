@@ -46,15 +46,13 @@
                     <p class="numbers__content-info">{{num.info}}</p>
 
                     <div class="form-group">
-                      <router-link :to="{name: 'booking', params: {id: id, num: index }}"
-                      >
                       <BaseButton
                         class="booking-btn"
                         text="Забронировать"
                         modifyStyle="booking-button"
-                        :disabled = hotelInfo.numbers[index].booking
+                        :disabled="hotelInfo.numbers[index].booking"
+                        @click="checkBookingNumber(hotelInfo.numbers[index].booking, index)"
                       />
-                      </router-link>
                     </div>
                     <div class="text-booking"
                       v-if="hotelInfo.numbers[index].booking"
@@ -103,12 +101,13 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Sidebar, Popup } from '@/components/widgets';
 import { SwiperSlider } from '@/components/widgets';
 import { defineProps, computed, onBeforeMount, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useHotelsStore } from '../../stores/hotelsStore.js';
 
 // здесь получаем через getter из store данные об отеле!
 const hotelsStore = useHotelsStore();
 const hotelInfo = computed(()=> hotelsStore.getHotelInfo);
+const router = useRouter();
 const route = useRoute();
 const id = computed(()=>  route.params.id);
 
@@ -119,6 +118,13 @@ function sliderClick (sl) {
   isPopupVisible.value = true;
   inPopupSlides.value = sl.img;
 }
+function checkBookingNumber(value, index) {
+  if(value) {return}
+  else {
+    router.push({name: 'booking', params: {id: route.params.id, num: index}})
+  }
+}
+
 onBeforeMount(async()=> {
     await hotelsStore.fetchHotelById(id.value);
 })
