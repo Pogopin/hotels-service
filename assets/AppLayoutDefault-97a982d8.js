@@ -1,0 +1,1 @@
+import{d as a,_ as t,o,c as r,a as s,u as n,r as _,F as c}from"./index-6629620b.js";const l=a(()=>t(()=>import("./index-2a3e2512.js"),["assets/index-2a3e2512.js","assets/index-6629620b.js","assets/index-3126f67d.css"])),m={__name:"AppLayoutDefault",setup(u){return(e,p)=>(o(),r(c,null,[s(n(l)),_(e.$slots,"default")],64))}};export{m as default};
